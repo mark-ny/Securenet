@@ -9,7 +9,12 @@
 // ── Change this to your Render.com URL after deploying ──
 const API_BASE = 'https://YOUR-RENDER-APP.onrender.com';
 
-(async () => {
+function onSecureNetReady(cb) {
+  if (window.SecureNet) { cb(); return; }
+  window.addEventListener('securenet:ready', cb, { once: true });
+}
+
+onSecureNetReady(async () => {
   const { Auth, DB, Realtime } = window.SecureNet;
 
   /* ── Auth guard ── */
@@ -658,4 +663,4 @@ const API_BASE = 'https://YOUR-RENDER-APP.onrender.com';
     return `${Math.floor(diff/86400)}d ago`;
   }
 
-})();
+});
