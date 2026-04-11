@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Upgrade Plan — SecureNet Pro</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body { min-height:100vh; }
+    .upgrade-hero { text-align:center; padding:80px 0 48px; }
+    .upgrade-hero h1 { font-size:clamp(28px,4vw,46px); font-weight:900; margin-bottom:12px; }
+    .upgrade-hero p  { font-size:16px; color:var(--text2); max-width:520px; margin:0 auto; line-height:1.7; }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+      max-width: 1200px;
+      margin: 48px auto 0;
+    }
+
+    .price-card {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 28px 22px;
+      position: relative;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .price-card:hover { transform: translateY(-4px); border-color: rgba(0,229,255,0.2); }
+
+    .price-card.featured {
+      border-color: rgba(0,229,255,0.35);
+      background: linear-gradient(160deg, rgba(0,229,255,0.05), var(--panel));
+    }
+
+    .price-card.featured::before {
+      content: '';
+      position: absolute;
+      top:0;left:0;right:0;height:2px;
+      background: linear-gradient(90deg, var(--neon), var(--neon2));
+      border-radius: 16px 16px 0 0;
+    }
+
+    /* Cloud Forever special card */
+    .price-card.cloud-forever {
+      border-color: rgba(255,184,0,0.4);
+      background: linear-gradient(160deg, rgba(255,184,0,0.06), rgba(255,140,0,0.03), var(--panel));
+    }
+
+    .price-card.cloud-forever::before {
+      content: '';
+      position: absolute;
+      top:0;left:0;right:0;height:3px;
+      background: linear-gradient(90deg, #ffb800, #ff6b00, #ff2d55);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .cloud-forever-glow {
+      position: absolute;
+      inset: -1px;
+      border-radius: 17px;
+      background: transparent;
+      box-shadow: 0 0 40px rgba(255,184,0,0.12), 0 0 80px rgba(255,100,0,0.06);
+      pointer-events: none;
+    }
+
+    .pop-badge {
+      position: absolute;
+      top: -13px; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 12px;
+      letter-spacing: 1px;
+      white-space: nowrap;
+    }
+
+    .pop-badge-neon  { background:var(--neon); color:#000; }
+    .pop-badge-gold  { background:linear-gradient(90deg,#ffb800,#ff6b00); color:#000; }
+
+    .price-tier-name { font-family:var(--mono); font-size:10px; color:var(--text3); letter-spacing:2px; margin-bottom:14px; }
+
+    .price-big {
+      font-family: var(--display);
+      font-size: 44px;
+      font-weight: 900;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .price-big sup { font-size:18px; vertical-align:top; margin-top:10px; display:inline-block; }
+    .price-big sub { font-size:14px; color:var(--text2); }
+    .price-big.gold-price { color: #ffb800; }
+
+    .price-period { font-size:12px; color:var(--text3); margin-bottom:16px; }
+
+    .price-lifetime-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,184,0,0.1);
+      border: 1px solid rgba(255,184,0,0.3);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-family: var(--mono);
+      color: #ffb800;
+      margin-bottom: 14px;
+    }
+
+    .price-divider { height:1px; background:var(--border2); margin:16px 0; }
+
+    .price-features { list-style:none; padding:0; margin:0 0 20px; flex:1; }
+    .price-features li {
+      padding:6px 0;
+      font-size:12.5px;
+      color:var(--text2);
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      border-bottom:1px solid rgba(255,255,255,0.03);
+    }
+    .price-features li:last-child { border-bottom:none; }
+    .price-features li::before { content:'✓'; color:var(--neon2); font-weight:700; font-size:11px; flex-shrink:0; margin-top:1px; }
+    .price-features li.off::before { content:'×'; color:var(--text3); }
+    .price-features li.off { opacity:0.35; }
+    .price-features li.gold::before { content:'★'; color:#ffb800; }
+
+    /* PayPal button */
+    .paypal-btn {
+      width:100%;
+      background:#FFD140;
+      color:#000;
+      border:none;
+      border-radius:var(--r);
+      padding:13px;
+      font-size:14px;
+      font-weight:700;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition:all 0.2s;
+      font-family:var(--body);
+      margin-top:auto;
+    }
+
+    .paypal-btn:hover { background:#F0C030; transform:translateY(-1px); box-shadow:0 4px 20px rgba(255,209,64,0.3); }
+    .paypal-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+    .paypal-btn-gold {
+      background: linear-gradient(135deg, #ffb800, #ff6b00);
+      color: #000;
+      font-size:15px;
+      padding:15px;
+      box-shadow: 0 4px 24px rgba(255,184,0,0.25);
+    }
+
+    .paypal-btn-gold:hover { background: linear-gradient(135deg, #ffc820, #ff7b10); box-shadow:0 6px 32px rgba(255,184,0,0.4); }
+
+    .secure-note { font-size:10px; color:var(--text3); text-align:center; margin-top:8px; font-family:var(--mono); }
+
+    /* Notification banners */
+    .notif { border-radius:12px; padding:16px 24px; margin-bottom:24px; text-align:center; display:none; }
+    .notif-success { background:rgba(0,255,157,0.06); border:1px solid rgba(0,255,157,0.2); color:var(--neon2); }
+    .notif-cancel  { background:rgba(255,184,0,0.06); border:1px solid rgba(255,184,0,0.2); color:#ffb800; }
+
+    /* Modal */
+    .modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.8); backdrop-filter:blur(10px); z-index:1000; align-items:center; justify-content:center; }
+    .modal-overlay.show { display:flex; }
+    .modal-card { background:var(--panel); border:1px solid var(--border2); border-radius:20px; padding:40px; width:100%; max-width:460px; text-align:center; position:relative; }
+    .modal-close { position:absolute; top:16px; right:16px; background:none; border:none; font-size:20px; color:var(--text3); cursor:pointer; }
+    .modal-close:hover { color:var(--text); }
+    .spin-ring { width:40px;height:40px;border:3px solid rgba(0,229,255,0.1);border-top-color:var(--neon);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px; }
+    @keyframes spin { to{ transform:rotate(360deg); } }
+
+    /* Value banner */
+    .value-banner {
+      background: linear-gradient(135deg, rgba(255,184,0,0.08), rgba(255,100,0,0.04));
+      border: 1px solid rgba(255,184,0,0.2);
+      border-radius: 12px;
+      padding: 20px 28px;
+      max-width: 1200px;
+      margin: 24px auto 0;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .value-banner-icon { font-size:32px; flex-shrink:0; }
+
+    .value-banner-text h3 { font-size:16px; font-weight:700; color:#ffb800; margin-bottom:4px; }
+    .value-banner-text p  { font-size:13px; color:var(--text2); }
+
+    /* FAQ */
+    .faq-section { max-width:680px; margin:80px auto 40px; }
+    .faq-item { background:var(--panel); border:1px solid var(--border2); border-radius:12px; margin-bottom:10px; overflow:hidden; }
+    .faq-q { padding:16px 20px; font-weight:600; font-size:14px; cursor:pointer; display:flex; align-items:center; justify-content:space-between; }
+    .faq-q:hover { color:var(--neon); }
+    .faq-q::after { content:'+'; font-size:18px; color:var(--text3); }
+    .faq-item.open .faq-q::after { content:'−'; color:var(--neon); }
+    .faq-a { display:none; padding:0 20px 16px; font-size:13px; color:var(--text2); line-height:1.7; border-top:1px solid var(--border2); }
+    .faq-item.open .faq-a { display:block; }
+
+    @media(max-width:1000px) { .pricing-grid { grid-template-columns:repeat(2,1fr); } }
+    @media(max-width:600px)  { .pricing-grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+
+<nav id="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+          <circle cx="20" cy="20" r="5" fill="#00e5ff" opacity="0.9"/>
+          <circle cx="20" cy="20" r="3" fill="#00ff9d"/>
+        </svg>
+      </div>
+      <span class="logo-wordmark">Secure<em>Net</em> Pro</span>
+    </a>
+    <div class="nav-actions">
+      <a href="dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+      <a href="index.html#pricing" class="btn btn-ghost btn-sm">See Features</a>
+    </div>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="upgrade-hero">
+    <span class="section-tag">// CHOOSE YOUR PLAN</span>
+    <h1>Unlock the Full<br><span class="neon">SecureNet Arsenal</span></h1>
+    <p>From free forever to a one-time lifetime deal. Secure payment via PayPal. Cancel monthly plans anytime. The Cloud Forever plan never expires.</p>
+  </div>
+
+  <!-- Banners -->
+  <div class="notif notif-success" id="notif-success">
+    ✅ Payment successful! Your plan has been upgraded. <a href="dashboard.html" style="color:var(--neon)">Go to Dashboard →</a>
+  </div>
+  <div class="notif notif-cancel" id="notif-cancel">
+    ⚠ Payment was cancelled. No charges were made.
+  </div>
+
+  <!-- Pricing grid -->
+  <div class="pricing-grid">
+
+    <!-- FREE -->
+    <div class="price-card">
+      <div class="price-tier-name">// FREE</div>
+      <div class="price-big"><sup>$</sup>0</div>
+      <div class="price-period">Forever free · No credit card</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>10 scans per day</li>
+        <li>Web app &amp; SSL scanner</li>
+        <li>Dependency checker</li>
+        <li>DNS recon &amp; OSINT</li>
+        <li>Basic breach check</li>
+        <li>Basic PDF reports</li>
+        <li>Public CVE database</li>
+        <li class="off">Full ultra-deep engine</li>
+        <li class="off">API security fuzzer</li>
+        <li class="off">Cloud misconfiguration</li>
+        <li class="off">CVE auto-correlation</li>
+      </ul>
+      <a href="auth.html?tab=signup" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:auto">Current Plan</a>
+    </div>
+
+    <!-- PRO -->
+    <div class="price-card featured">
+      <div class="pop-badge pop-badge-neon">⭐ MOST POPULAR</div>
+      <div class="price-tier-name">// PRO</div>
+      <div class="price-big"><sup>$</sup>49<sub>/mo</sub></div>
+      <div class="price-period">Per user · Cancel anytime</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Unlimited scans</li>
+        <li>Ultra-deep scan engine v4.0</li>
+        <li>7-layer vulnerability detection</li>
+        <li>Shannon entropy secret scanning</li>
+        <li>CVE auto-correlation engine</li>
+        <li>Timing &amp; behavioral analysis</li>
+        <li>API security fuzzer</li>
+        <li>AI threat modeler</li>
+        <li>MITRE ATT&amp;CK mapping</li>
+        <li>PDF + DOCX reports</li>
+        <li>CI/CD webhooks</li>
+        <li class="off">Cloud misconfiguration suite</li>
+        <li class="off">S3/GCP bucket scanner</li>
+      </ul>
+      <button class="paypal-btn" onclick="startPayPal('pro')" id="btn-pro">
+        🅿 Pay $49/mo with PayPal
+      </button>
+      <div class="secure-note">🔒 PayPal · SSL encrypted · Cancel anytime</div>
+    </div>
+
+    <!-- ENTERPRISE -->
+    <div class="price-card">
+      <div class="price-tier-name">// ENTERPRISE</div>
+      <div class="price-big"><sup>$</sup>299<sub>/mo</sub></div>
+      <div class="price-period">Volume licensing · SLA-backed</div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li>Everything in Pro</li>
+        <li>Cloud misconfiguration suite</li>
+        <li>S3 + GCP bucket scanning</li>
+        <li>DNS zone transfer detection</li>
+        <li>SPF/DMARC policy audit</li>
+        <li>On-premise deployment</li>
+        <li>SSO / SAML / LDAP</li>
+        <li>Custom scan policies</li>
+        <li>Dedicated pentest team</li>
+        <li>SOC2 / ISO 27001 reports</li>
+        <li>White-label branding</li>
+        <li>24/7 dedicated support</li>
+        <li>SLA: 99.99% uptime</li>
+      </ul>
+      <button class="paypal-btn" onclick="startPayPal('enterprise')" id="btn-enterprise">
+        🅿 Pay $299/mo with PayPal
+      </button>
+      <div class="secure-note">🔒 PayPal · Volume discounts available</div>
+    </div>
+
+    <!-- CLOUD FOREVER -->
+    <div class="price-card cloud-forever">
+      <div class="cloud-forever-glow"></div>
+      <div class="pop-badge pop-badge-gold">☁ BEST VALUE — LIFETIME</div>
+      <div class="price-tier-name">// CLOUD FOREVER</div>
+      <div class="price-big gold-price"><sup style="color:#ffb800">$</sup>450</div>
+      <div class="price-period">One-time payment · Lifetime access</div>
+      <div class="price-lifetime-badge">
+        <span>♾</span> Never pay again
+      </div>
+      <div class="price-divider"></div>
+      <ul class="price-features">
+        <li class="gold">Everything in Enterprise — forever</li>
+        <li class="gold">Lifetime license — no renewals</li>
+        <li class="gold">All future feature updates included</li>
+        <li class="gold">Full cloud misconfiguration engine</li>
+        <li class="gold">Unlimited S3/GCP/Azure scanning</li>
+        <li class="gold">Ultra-deep 7-layer scan engine</li>
+        <li class="gold">CVE + MITRE ATT&amp;CK correlation</li>
+        <li class="gold">Entropy-based secret detection</li>
+        <li class="gold">Timing &amp; behavioral analysis</li>
+        <li class="gold">White-label branding</li>
+        <li class="gold">Priority support — forever</li>
+        <li class="gold">Air-gapped deployment option</li>
+      </ul>
+      <button class="paypal-btn paypal-btn-gold" onclick="startPayPal('cloud_forever')" id="btn-cloud-forever">
+        ☁ Pay $450 Once — Own It Forever
+      </button>
+      <div class="secure-note" style="color:rgba(255,184,0,0.6)">🔒 Secure one-time PayPal payment · No recurring charges · Ever</div>
+    </div>
+
+  </div>
+
+  <!-- Value banner -->
+  <div class="value-banner">
+    <div class="value-banner-icon">💡</div>
+    <div class="value-banner-text">
+      <h3>Cloud Forever breaks even in under 2 months vs Enterprise</h3>
+      <p>Enterprise costs $299/month ($3,588/year). Cloud Forever is a one-time $450 payment with no renewals — you save over $3,100 in the first year alone. Everything included. All future updates. Forever.</p>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div class="faq-section">
+    <h2 style="text-align:center;margin-bottom:32px;font-size:22px">Frequently Asked Questions</h2>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">What does "Cloud Forever" actually mean?</div>
+      <div class="faq-a">Cloud Forever is a one-time $450 payment that gives you lifetime access to all SecureNet Pro features — including the full Enterprise tier, all future updates, and priority support. There are no monthly fees, no renewals, no hidden costs. Ever. You pay once and own it forever.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Is my payment information secure with PayPal?</div>
+      <div class="faq-a">Yes. All payments are processed through PayPal's PCI-DSS compliant infrastructure using 256-bit SSL encryption. SecureNet Pro never stores your card details. You can pay with your PayPal balance, bank account, or credit/debit card through PayPal's secure checkout.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Can I cancel monthly plans anytime?</div>
+      <div class="faq-a">Yes — Pro and Enterprise plans can be cancelled at any time from your PayPal account or by contacting support. Your plan remains active until the end of the billing period. No cancellation fees. Cloud Forever has no subscription to cancel — you own it outright.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">What makes the ultra-deep scan engine different?</div>
+      <div class="faq-a">SecureNet Pro v4.0 runs 7 parallel analysis layers: SSL/TLS deep audit, HTTP response pattern mining with Shannon entropy secret detection, 60+ sensitive path discovery, DNS intelligence (SPF/DMARC/zone transfer), timing-based behavioral analysis, cloud misconfiguration scanning (S3/GCP), and CVE auto-correlation against detected technology versions. This goes far beyond what most commercial scanners offer.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Will I get future updates on Cloud Forever?</div>
+      <div class="faq-a">Yes — Cloud Forever includes all future feature updates at no extra cost. As we add new scan modules, detection patterns, and platform features, your Cloud Forever account automatically gets them. You invested once; you benefit forever.</div>
+    </div>
+
+    <div class="faq-item" onclick="this.classList.toggle('open')">
+      <div class="faq-q">Is this legal to use?</div>
+      <div class="faq-a">SecureNet Pro is for authorized security testing only. You must only scan systems you own or have explicit written permission to test. Unauthorized scanning may violate computer crime laws. All users must agree to the Acceptable Use Policy before accessing scanning features.</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="paypal-modal">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div id="modal-body">
+      <div style="font-size:40px;margin-bottom:16px">🅿</div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:8px">Redirecting to PayPal</div>
+      <div style="font-size:14px;color:var(--text2);margin-bottom:24px">Completing your secure payment...</div>
+      <div class="spin-ring"></div>
+      <p style="font-size:11px;color:var(--text3);font-family:var(--mono)">Please wait — do not close this window</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script>
+  const API_BASE = 'https://YOUR-RENDER-APP.onrender.com'; // ← Replace after Render deploy
+
+  // Handle return from PayPal
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('payment') === 'success') {
+    document.getElementById('notif-success').style.display = 'block';
+    const orderId = params.get('token');
+    const plan    = params.get('plan') || 'pro';
+    if (orderId) captureOrder(orderId, plan);
+  }
+  if (params.get('payment') === 'cancelled') {
+    document.getElementById('notif-cancel').style.display = 'block';
+  }
+
+  async function captureOrder(orderId, plan) {
+    const { Auth } = window.SecureNet;
+    const user = await Auth.getUser();
+    if (!user) return;
+    try {
+      await fetch(`${API_BASE}/api/paypal/capture-order?order_id=${orderId}&user_id=${user.id}&plan=${plan}`, {
+        method: 'POST'
+      });
+    } catch (e) { console.warn('Capture failed', e); }
+  }
+
+  async function startPayPal(plan) {
+    const { Auth } = window.SecureNet;
+    const user = await Auth.getUser();
+
+    if (!user) {
+      alert('Please sign in first to upgrade your plan.');
+      window.location.href = 'auth.html?tab=signin&return=upgrade.html';
+      return;
+    }
+
+    const btn = document.getElementById(`btn-${plan.replace('_', '-')}`);
+    if (btn) btn.disabled = true;
+    document.getElementById('paypal-modal').classList.add('show');
+
+    const PLAN_LABELS = {
+      pro: '$49/month Pro Plan',
+      enterprise: '$299/month Enterprise Plan',
+      cloud_forever: '$450 Cloud Forever (Lifetime)'
+    };
+
+    try {
+      const resp = await fetch(`${API_BASE}/api/paypal/create-order`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan, user_id: user.id })
+      });
+
+      if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        throw new Error(err.detail || `HTTP ${resp.status}`);
+      }
+
+      const data = await resp.json();
+      if (data.approve_url) {
+        window.location.href = data.approve_url;
+      } else {
+        throw new Error('No PayPal approval URL received');
+      }
+
+    } catch (err) {
+      closeModal();
+      if (btn) btn.disabled = false;
+
+      // Show setup instructions if backend not configured
+      document.getElementById('modal-body').innerHTML = `
+        <div style="font-size:36px;margin-bottom:14px">⚙️</div>
+        <div style="font-size:18px;font-weight:800;margin-bottom:8px">Backend Setup Required</div>
+        <div style="font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6">
+          To enable real PayPal payments, deploy the backend to Render.com and add your credentials:
+          <br><br>
+          <code style="font-family:var(--mono);font-size:11px;color:var(--neon);display:block;text-align:left;background:var(--bg3);padding:12px;border-radius:8px;margin:10px 0">
+            PAYPAL_CLIENT_ID = your_client_id<br>
+            PAYPAL_CLIENT_SECRET = your_secret<br>
+            PAYPAL_MODE = sandbox  (or live)<br>
+            APP_URL = https://yoursite.vercel.app
+          </code>
+          Selected plan: <strong style="color:var(--neon)">${PLAN_LABELS[plan] || plan}</strong>
+          <br>Error: ${err.message}
+        </div>
+        <a href="https://developer.paypal.com/dashboard/applications/sandbox" target="_blank" class="btn btn-ghost btn-sm" style="margin-right:8px">PayPal Dev Console →</a>
+        <button class="btn btn-primary btn-sm" onclick="closeModal()">Close</button>
+      `;
+      document.getElementById('paypal-modal').classList.add('show');
+    }
+  }
+
+  function closeModal() {
+    document.getElementById('paypal-modal').classList.remove('show');
+    // Re-enable all buttons
+    ['btn-pro','btn-enterprise','btn-cloud-forever'].forEach(id => {
+      const btn = document.getElementById(id);
+      if (btn) btn.disabled = false;
+    });
+  }
+</script>
+</body>
+</html>

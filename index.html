@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="SecureNet Pro — Enterprise vulnerability detection and penetration testing platform. Free tools for scanning code, APIs, networks, and web applications." />
+  <meta name="keywords" content="vulnerability scanner, penetration testing, cybersecurity, OWASP, pentest, security audit" />
+  <meta property="og:title" content="SecureNet Pro — Advanced Security Testing Platform" />
+  <meta property="og:description" content="Free enterprise-grade vulnerability detection and penetration testing tools." />
+  <meta property="og:type" content="website" />
+  <title>SecureNet Pro — Advanced Vulnerability & Pentest Platform</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+  <link rel="stylesheet" href="css/main.css" />
+</head>
+<body>
+
+<!-- Custom cursor -->
+<div id="cursor"></div>
+<div id="cursor-ring"></div>
+
+<!-- Background effects -->
+<div class="bg-grid"></div>
+<div class="bg-noise"></div>
+
+<!-- Scroll progress -->
+<div id="progress"></div>
+
+<!-- Threat intelligence ticker -->
+<div id="threat-ticker" style="display:none">
+  <div style="display:flex;align-items:center;overflow:hidden;">
+    <span class="ticker-label">⚡ LIVE THREATS</span>
+    <div class="ticker-inner" id="ticker-track"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════
+     NAVIGATION
+════════════════════════ -->
+<nav id="nav">
+  <div class="container nav-inner">
+    <a href="index.html" class="nav-logo">
+      <div class="logo-mark">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+          <polygon points="20,8 32,15 32,25 20,32 8,25 8,15" fill="rgba(0,229,255,0.06)" stroke="#00e5ff" stroke-width="1"/>
+          <circle cx="20" cy="20" r="5" fill="#00e5ff" opacity="0.9"/>
+          <circle cx="20" cy="20" r="3" fill="#00ff9d"/>
+        </svg>
+      </div>
+      <span class="logo-wordmark">Secure<em>Net</em> Pro</span>
+    </a>
+    <ul class="nav-menu">
+      <li><a href="#tools">Tools</a></li>
+      <li><a href="#scanner">Live Scanner</a></li>
+      <li><a href="breach.html" style="color:#ff6b6b">🚨 Breach Intel</a></li>
+      <li><a href="#pentest">Pentest Suite</a></li>
+      <li><a href="#threat-map">Threat Map</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="dashboard.html">Dashboard</a></li>
+    </ul>
+    <div class="nav-actions">
+      <a href="auth.html" class="btn btn-ghost btn-sm">Sign In</a>
+      <a href="#scanner" class="btn btn-primary btn-sm">Free Scan →</a>
+      <button class="hamburger" id="hamburger">☰</button>
+    </div>
+  </div>
+</nav>
+
+<!-- Mobile nav -->
+<nav class="mobile-nav" id="mobile-nav">
+  <a href="#tools">Tools</a>
+  <a href="#scanner">Live Scanner</a>
+  <a href="#pentest">Pentest Suite</a>
+  <a href="#threat-map">Threat Map</a>
+  <a href="#reports">Reports</a>
+  <a href="#pricing">Pricing</a>
+  <a href="dashboard.html" class="btn btn-primary" style="margin-top:16px;text-align:center">Open Dashboard →</a>
+</nav>
+
+<!-- ═══════════════════════
+     HERO
+════════════════════════ -->
+<section class="hero" style="overflow:hidden">
+  <!-- Ambient orbs -->
+  <div class="orb" style="width:700px;height:700px;background:radial-gradient(circle,rgba(0,229,255,0.07),transparent 70%);top:-200px;right:-200px;position:absolute;border-radius:50%;z-index:1"></div>
+  <div class="orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(0,255,157,0.05),transparent 70%);bottom:-100px;left:-100px;position:absolute;border-radius:50%;z-index:1"></div>
+
+  <!-- Particle canvas -->
+  <canvas id="hero-particles" style="position:absolute;inset:0;width:100%;height:100%;z-index:1;opacity:0.7;pointer-events:none"></canvas>
+
+  <div class="container" style="position:relative;z-index:3">
+    <div class="hero-content">
+      <div class="hero-eyebrow">
+        <span class="badge-dot"></span>
+        REAL-TIME THREAT INTELLIGENCE ACTIVE
+      </div>
+
+      <h1>
+        Find Every<br>
+        <span class="neon glitch-on-hover">Vulnerability.</span><br>
+        <span class="stroke">Before They Do.</span>
+      </h1>
+
+      <p class="hero-sub">
+        Enterprise-grade security testing tools — free and open. Scan code, APIs, networks, and web apps with AI-powered analysis. Trusted by 3,200+ security teams.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#scanner" class="btn btn-primary btn-lg">Launch Free Scan →</a>
+        <a href="dashboard.html" class="btn btn-ghost btn-lg">Open Dashboard</a>
+        <a href="#pentest" class="btn btn-lg" style="background:rgba(168,85,247,0.08);color:#a855f7;border:1px solid rgba(168,85,247,0.25)">Pentest Suite ↓</a>
+      </div>
+
+      <div class="hero-trust">
+        <div class="trust-avatars">
+          <span title="Security Engineer">👩‍💻</span>
+          <span title="Penetration Tester">🧑‍💻</span>
+          <span title="CTO">👨‍💼</span>
+          <span title="Security Analyst">👩‍🔬</span>
+        </div>
+        <p class="trust-line">Trusted by <strong style="color:var(--text)">3,200+</strong> organizations worldwide</p>
+        <span class="badge badge-green"><span class="badge-dot"></span> SOC2 Compliant</span>
+      </div>
+    </div>
+
+    <!-- Hero visual — floating security dashboard preview -->
+    <div class="hero-visual">
+      <svg viewBox="0 0 580 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+        <defs>
+          <filter id="glow-f">
+            <feGaussianBlur stdDeviation="4" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+          <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:0.15"/>
+            <stop offset="100%" style="stop-color:#00ff9d;stop-opacity:0.05"/>
+          </linearGradient>
+        </defs>
+
+        <!-- Main shield -->
+        <polygon points="290,30 530,130 530,330 290,550 50,330 50,130" fill="url(#grad1)" stroke="#00e5ff" stroke-width="1" opacity="0.5"/>
+        <polygon points="290,70 490,155 490,315 290,510 90,315 90,155" fill="rgba(0,229,255,0.03)" stroke="#00e5ff" stroke-width="0.5" opacity="0.4"/>
+        <polygon points="290,110 450,180 450,300 290,470 130,300 130,180" fill="rgba(0,229,255,0.02)" stroke="#00e5ff" stroke-width="0.5" opacity="0.3"/>
+
+        <!-- Center circle -->
+        <circle cx="290" cy="290" r="70" fill="rgba(0,229,255,0.06)" stroke="#00e5ff" stroke-width="1.5" filter="url(#glow-f)"/>
+        <circle cx="290" cy="290" r="50" fill="rgba(0,229,255,0.04)" stroke="#00ff9d" stroke-width="1"/>
+        <circle cx="290" cy="290" r="18" fill="#00e5ff" opacity="0.9"/>
+        <circle cx="290" cy="290" r="10" fill="#00ff9d"/>
+
+        <!-- Orbiting nodes -->
+        <circle cx="290" cy="180" r="8" fill="#ff2d55" filter="url(#glow-f)">
+          <animateTransform attributeName="transform" type="rotate" from="0 290 290" to="360 290 290" dur="12s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="400" cy="290" r="6" fill="#00e5ff" filter="url(#glow-f)">
+          <animateTransform attributeName="transform" type="rotate" from="60 290 290" to="420 290 290" dur="8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="180" cy="290" r="5" fill="#00ff9d" filter="url(#glow-f)">
+          <animateTransform attributeName="transform" type="rotate" from="120 290 290" to="-240 290 290" dur="10s" repeatCount="indefinite"/>
+        </circle>
+
+        <!-- Corner panels -->
+        <rect x="30" y="30" width="120" height="60" rx="6" fill="rgba(10,25,41,0.9)" stroke="#112d45" stroke-width="1"/>
+        <text x="45" y="55" font-family="'Share Tech Mono',monospace" font-size="9" fill="#5a8ba5">CRITICAL</text>
+        <text x="45" y="72" font-family="'Syne',sans-serif" font-weight="800" font-size="18" fill="#ff2d55">3</text>
+
+        <rect x="430" y="30" width="120" height="60" rx="6" fill="rgba(10,25,41,0.9)" stroke="#112d45" stroke-width="1"/>
+        <text x="445" y="55" font-family="'Share Tech Mono',monospace" font-size="9" fill="#5a8ba5">HOSTS UP</text>
+        <text x="445" y="72" font-family="'Syne',sans-serif" font-weight="800" font-size="18" fill="#00e5ff">47</text>
+
+        <rect x="30" y="490" width="120" height="60" rx="6" fill="rgba(10,25,41,0.9)" stroke="#112d45" stroke-width="1"/>
+        <text x="45" y="515" font-family="'Share Tech Mono',monospace" font-size="9" fill="#5a8ba5">RISK SCORE</text>
+        <text x="45" y="532" font-family="'Syne',sans-serif" font-weight="800" font-size="18" fill="#ffb800">7.4</text>
+
+        <rect x="430" y="490" width="120" height="60" rx="6" fill="rgba(10,25,41,0.9)" stroke="#112d45" stroke-width="1"/>
+        <text x="445" y="515" font-family="'Share Tech Mono',monospace" font-size="9" fill="#5a8ba5">ENDPOINTS</text>
+        <text x="445" y="532" font-family="'Syne',sans-serif" font-weight="800" font-size="18" fill="#00ff9d">142</text>
+
+        <!-- Scanning lines -->
+        <line x1="50" y1="130" x2="530" y2="130" stroke="#00e5ff" stroke-width="0.3" opacity="0.2">
+          <animate attributeName="y1" values="130;430;130" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="y2" values="130;430;130" dur="4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.3;0.05;0.3" dur="4s" repeatCount="indefinite"/>
+        </line>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════
+     STATS BAR
+════════════════════════ -->
+<div class="stats-row">
+  <div class="stat-cell" style="--accent:#ff2d55">
+    <span class="stat-n" data-val="94271" data-suf="">0</span>
+    <span class="stat-l">Vulnerabilities Detected</span>
+    <span class="stat-d">↑ 12% this month</span>
+  </div>
+  <div class="stat-cell" style="--accent:#00e5ff">
+    <span class="stat-n" data-val="28400" data-suf="+">0</span>
+    <span class="stat-l">Scans Completed</span>
+    <span class="stat-d">Across 90 countries</span>
+  </div>
+  <div class="stat-cell" style="--accent:#00ff9d">
+    <span class="stat-n" data-val="3200" data-suf="+">0</span>
+    <span class="stat-l">Organizations Protected</span>
+    <span class="stat-d">From startups to Fortune 500</span>
+  </div>
+  <div class="stat-cell" style="--accent:#ffb800">
+    <span class="stat-n" data-val="99" data-suf=".9%" data-dec="0">0</span>
+    <span class="stat-l">Platform Uptime SLA</span>
+    <span class="stat-d">Last 12 months</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════
+     FREE TOOLS
+════════════════════════ -->
+<section id="tools" class="section">
+  <div class="container">
+    <span class="section-tag reveal">// 11 FREE SECURITY TOOLS</span>
+    <h2 class="section-title reveal">Your Complete Arsenal,<br>No Subscription Needed</h2>
+    <p class="section-sub reveal">Every tool is free to use. Core scanning is unlimited. Upgrade for deeper automation and enterprise features.</p>
+
+    <div class="tools-filter reveal" style="margin-top:32px">
+      <button class="filter-btn active" data-filter="all">All Tools</button>
+      <button class="filter-btn" data-filter="web">Web</button>
+      <button class="filter-btn" data-filter="network">Network</button>
+      <button class="filter-btn" data-filter="code">Code</button>
+      <button class="filter-btn" data-filter="cloud">Cloud</button>
+      <button class="filter-btn" data-filter="ai">AI-Powered</button>
+    </div>
+
+    <div class="tools-masonry reveal">
+
+      <div class="tool-card card-glow" data-cat="web" style="--tool-color:#00e5ff">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">🔍</div>
+        <div class="tool-name glitch-on-hover">Web App Scanner</div>
+        <div class="tool-desc">Deep automated crawl and fuzz of web applications. Detects OWASP Top 10, business logic flaws, auth bypasses, and insecure direct object references.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-green">AI</span>
+          </div>
+          <span class="tool-rating">★ 4.9 (2.1k)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="code" style="--tool-color:#a855f7">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">💻</div>
+        <div class="tool-name glitch-on-hover">Code Vulnerability Scanner</div>
+        <div class="tool-desc">Static analysis for 35+ languages. AI detects injection, insecure cryptography, race conditions, hardcoded credentials, and insecure deserialization.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-purple">SAST</span>
+          </div>
+          <span class="tool-rating">★ 4.8 (1.4k)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="network" style="--tool-color:#ff2d55">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">📡</div>
+        <div class="tool-name glitch-on-hover">Network Port Scanner</div>
+        <div class="tool-desc">Passive and active scanning across IP ranges. Service fingerprinting, banner grabbing, firewall evasion, and shadow IT discovery across your perimeter.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-red">HIGH IMPACT</span>
+          </div>
+          <span class="tool-rating">★ 4.9 (980)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="web" style="--tool-color:#00ff9d">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">🔐</div>
+        <div class="tool-name glitch-on-hover">SSL/TLS Analyzer</div>
+        <div class="tool-desc">Full certificate chain, cipher suite audit, HSTS policy, BEAST/POODLE/CRIME/HEARTBLEED checks, protocol downgrade tests, and OCSP stapling validation.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+          </div>
+          <span class="tool-rating">★ 4.7 (620)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="web ai" style="--tool-color:#ffb800">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">⚡</div>
+        <div class="tool-name glitch-on-hover">API Security Tester</div>
+        <div class="tool-desc">Import OpenAPI/Swagger/GraphQL specs and automatically fuzz every endpoint. Detects BOLA, mass assignment, rate limit bypass, schema injection, and auth token exposure.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-green">AI</span>
+          </div>
+          <span class="tool-rating">★ 4.9 (1.8k)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="cloud" style="--tool-color:#00e5ff">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">☁️</div>
+        <div class="tool-name glitch-on-hover">Cloud Config Auditor</div>
+        <div class="tool-desc">AWS, GCP, and Azure security posture assessment. Audits IAM overpermissions, public S3 buckets, unencrypted volumes, exposed databases, and VPC misconfigurations.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-red">HIGH IMPACT</span>
+          </div>
+          <span class="tool-rating">★ 4.8 (870)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="code" style="--tool-color:#00ff9d">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">📦</div>
+        <div class="tool-name glitch-on-hover">Dependency Checker</div>
+        <div class="tool-desc">Cross-reference package.json, requirements.txt, pom.xml, Gemfile, cargo.toml against NVD, OSV, GitHub Advisories, and Snyk databases in seconds.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-purple">SCA</span>
+          </div>
+          <span class="tool-rating">★ 4.6 (1.1k)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="code ai" style="--tool-color:#ff2d55">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">🧬</div>
+        <div class="tool-name glitch-on-hover">Secrets Detector</div>
+        <div class="tool-desc">Scan repos, Docker images, archives, and CI/CD pipelines for exposed API keys, private keys, tokens, connection strings, and credentials using 600+ entropy-based patterns.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-green">AI</span>
+          </div>
+          <span class="tool-rating">★ 5.0 (2.4k)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="network" style="--tool-color:#a855f7">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">🕵️</div>
+        <div class="tool-name glitch-on-hover">DNS Recon & OSINT</div>
+        <div class="tool-desc">Enumerate subdomains, MX, DNSSEC, zone transfers, SPF/DKIM/DMARC, certificate transparency logs, and typosquat monitoring with breach database cross-referencing.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+          </div>
+          <span class="tool-rating">★ 4.7 (530)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="web ai" style="--tool-color:#00ff9d">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">🤖</div>
+        <div class="tool-name glitch-on-hover">AI Threat Modeler</div>
+        <div class="tool-desc">Describe your system architecture in plain language. AI generates a STRIDE threat model, attack surface diagram, and prioritized mitigation roadmap automatically.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-green">AI NATIVE</span>
+          </div>
+          <span class="tool-rating">★ 4.9 (3.1k)</span>
+        </div>
+      </div>
+
+      <div class="tool-card card-glow" data-cat="cloud network" style="--tool-color:#ffb800">
+        <div class="tool-card-corner"></div>
+        <div class="tool-icon-wrap">🔥</div>
+        <div class="tool-name glitch-on-hover">Firewall & WAF Tester</div>
+        <div class="tool-desc">Test WAF rulesets with 2,000+ bypass payloads. Identify filter gaps, evasion vectors, and response patterns across popular WAF products like Cloudflare, AWS WAF, and ModSecurity.</div>
+        <div class="tool-meta">
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            <span class="badge badge-neon">FREE</span>
+            <span class="badge badge-red">HIGH IMPACT</span>
+          </div>
+          <span class="tool-rating">★ 4.8 (760)</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════
+     LIVE SCANNER
+════════════════════════ -->
+<section id="scanner" class="section">
+  <div class="container">
+    <span class="section-tag reveal">// INTERACTIVE — NO ACCOUNT REQUIRED</span>
+    <h2 class="section-title reveal">Run a Professional Scan<br>Right Now</h2>
+    <p class="section-sub reveal" style="margin-bottom:40px">Paste a URL, IP, or domain. Our engine begins passive checks immediately. Deep scans queue within minutes with email delivery.</p>
+
+    <div class="scanner-wrapper reveal">
+      <!-- Chrome bar -->
+      <div class="scanner-chrome">
+        <div class="chrome-dots">
+          <div class="chrome-dot cd-r"></div>
+          <div class="chrome-dot cd-y"></div>
+          <div class="chrome-dot cd-g"></div>
+        </div>
+        <div class="chrome-tab">
+          <div class="chrome-tab-dot"></div>
+          securenet-pro :: interactive scan terminal v3.1.0
+        </div>
+        <span class="badge badge-green" style="flex-shrink:0"><span class="badge-dot"></span>ONLINE</span>
+      </div>
+
+      <div class="scanner-layout">
+        <!-- Controls -->
+        <div class="scanner-controls">
+          <div class="ctrl-group">
+            <label class="ctrl-label">// Target</label>
+            <input class="ctrl-input" id="scan-target" type="text" placeholder="https://example.com or 192.168.1.0/24" autocomplete="off" spellcheck="false"/>
+          </div>
+
+          <div class="ctrl-group">
+            <label class="ctrl-label">// Scan Type</label>
+            <div class="scan-type-grid">
+              <div class="scan-type-btn sel"><em>🌐</em><span>Web App</span></div>
+              <div class="scan-type-btn"><em>📡</em><span>Network</span></div>
+              <div class="scan-type-btn"><em>⚡</em><span>API</span></div>
+              <div class="scan-type-btn"><em>🔐</em><span>SSL/TLS</span></div>
+            </div>
+          </div>
+
+          <div class="ctrl-group">
+            <label class="ctrl-label">// Scan Intensity</label>
+            <div class="intensity-slider">
+              <input type="range" min="1" max="3" value="2" id="intensity-range"/>
+              <div class="slider-labels">
+                <span>PASSIVE</span>
+                <span>STANDARD</span>
+                <span>AGGRESSIVE</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="ctrl-group">
+            <label class="ctrl-label">// Additional Checks</label>
+            <div class="scan-options-list">
+              <div class="scan-option checked">
+                <div class="check-box"></div>
+                <span class="scan-option-label">CVE cross-reference</span>
+              </div>
+              <div class="scan-option checked">
+                <div class="check-box"></div>
+                <span class="scan-option-label">MITRE ATT&CK mapping</span>
+              </div>
+              <div class="scan-option checked">
+                <div class="check-box"></div>
+                <span class="scan-option-label">AI remediation hints</span>
+              </div>
+              <div class="scan-option">
+                <div class="check-box"></div>
+                <span class="scan-option-label">Screenshot capture</span>
+              </div>
+              <div class="scan-option">
+                <div class="check-box"></div>
+                <span class="scan-option-label">Export PDF report</span>
+              </div>
+            </div>
+          </div>
+
+          <button class="scan-launch-btn" id="launch-scan">▶ INITIATE SCAN</button>
+        </div>
+
+        <!-- Terminal -->
+        <div>
+          <div class="terminal-output" id="terminal-output">
+            <div class="t-line"><span class="t-ts">00:00:00</span><span class="t-inf">● SecureNet Pro v3.1 — Engine Ready</span></div>
+            <div class="t-line"><span class="t-ts">00:00:00</span><span class="t-dim">Configure target and options, then click INITIATE SCAN</span></div>
+            <div class="t-line"><span class="t-ts">00:00:00</span><span class="t-dim">─────────────────────────────────────────────</span></div>
+            <span class="t-cursor"></span>
+          </div>
+
+          <!-- Results bar -->
+          <div class="results-bar">
+            <div class="result-cell">
+              <span class="result-num" data-key="crit" style="color:#ff2d55">—</span>
+              <span class="result-lbl">CRITICAL</span>
+            </div>
+            <div class="result-cell">
+              <span class="result-num" data-key="high" style="color:#ffb800">—</span>
+              <span class="result-lbl">HIGH</span>
+            </div>
+            <div class="result-cell">
+              <span class="result-num" data-key="med" style="color:#00e5ff">—</span>
+              <span class="result-lbl">MEDIUM</span>
+            </div>
+            <div class="result-cell">
+              <span class="result-num" data-key="low" style="color:#00ff9d">—</span>
+              <span class="result-lbl">LOW</span>
+            </div>
+            <div class="result-cell">
+              <span class="result-num" data-key="info" style="color:#5a8ba5">—</span>
+              <span class="result-lbl">INFO</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════
+     PENTEST SUITE
+════════════════════════ -->
+<section id="pentest" class="section">
+  <div class="container">
+    <span class="section-tag reveal">// PROFESSIONAL PENETRATION TESTING</span>
+    <h2 class="section-title reveal">Structured Pentest Methodology,<br>Automated at Scale</h2>
+    <p class="section-sub reveal" style="margin-bottom:48px">Follows PTES, OWASP Testing Guide v4.2, and NIST SP 800-115. Generates audit-ready reports accepted by compliance teams.</p>
+
+    <!-- Flow diagram -->
+    <div class="pentest-flow reveal">
+      <div class="flow-step" style="--step-color:#00ff9d">
+        <div class="flow-node" style="--step-color:#00ff9d">🔭</div>
+        <span class="flow-name">Recon</span>
+        <span class="flow-sub">Passive &amp; OSINT</span>
+      </div>
+      <div class="flow-step" style="--step-color:#00e5ff">
+        <div class="flow-node" style="--step-color:#00e5ff">🗺️</div>
+        <span class="flow-name">Enumerate</span>
+        <span class="flow-sub">Surface mapping</span>
+      </div>
+      <div class="flow-step" style="--step-color:#ffb800">
+        <div class="flow-node" style="--step-color:#ffb800">🎯</div>
+        <span class="flow-name">Assess</span>
+        <span class="flow-sub">Vuln scoring</span>
+      </div>
+      <div class="flow-step" style="--step-color:#ff2d55">
+        <div class="flow-node" style="--step-color:#ff2d55">⚡</div>
+        <span class="flow-name">Exploit</span>
+        <span class="flow-sub">Safe simulation</span>
+      </div>
+      <div class="flow-step" style="--step-color:#a855f7">
+        <div class="flow-node" style="--step-color:#a855f7">🕸️</div>
+        <span class="flow-name">Post-Exploit</span>
+        <span class="flow-sub">Lateral movement</span>
+      </div>
+      <div class="flow-step" style="--step-color:#00ff9d">
+        <div class="flow-node" style="--step-color:#00ff9d">📋</div>
+        <span class="flow-name">Report</span>
+        <span class="flow-sub">ATT&amp;CK mapped</span>
+      </div>
+    </div>
+
+    <div class="modules-grid reveal">
+
+      <div class="module-card" style="--mc:#00ff9d">
+        <div class="mc-num">01 — RECONNAISSANCE</div>
+        <div class="mc-icon">🔭</div>
+        <div class="mc-name">OSINT &amp; Passive Recon</div>
+        <div class="mc-desc">Shodan, Censys, and Certificate Transparency integration. WHOIS history, ASN mapping, breach data, dark web mentions, and employee profiling from public sources.</div>
+        <ul class="mc-features">
+          <li>Shodan &amp; Censys API integration</li>
+          <li>Certificate transparency logs</li>
+          <li>HaveIBeenPwned cross-reference</li>
+          <li>Google Dorks automation</li>
+        </ul>
+        <div class="mc-status">
+          <div class="badge-dot" style="background:var(--neon2)"></div>
+          <span class="neon2" style="font-family:var(--mono);font-size:10px;letter-spacing:1px">ONLINE — FREE</span>
+        </div>
+      </div>
+
+      <div class="module-card" style="--mc:#00e5ff">
+        <div class="mc-num">02 — ENUMERATION</div>
+        <div class="mc-icon">🗺️</div>
+        <div class="mc-name">Service Enumeration</div>
+        <div class="mc-desc">Banner grabbing, version fingerprinting, SMB share enumeration, SNMP community walk, directory brute-force with curated wordlists, and technology stack detection.</div>
+        <ul class="mc-features">
+          <li>40,000-entry directory wordlist</li>
+          <li>SMB, RPC, LDAP enumeration</li>
+          <li>Technology fingerprinting</li>
+          <li>WAF detection &amp; bypass</li>
+        </ul>
+        <div class="mc-status">
+          <div class="badge-dot" style="background:var(--neon2)"></div>
+          <span class="neon2" style="font-family:var(--mono);font-size:10px;letter-spacing:1px">ONLINE — FREE</span>
+        </div>
+      </div>
+
+      <div class="module-card" style="--mc:#ffb800">
+        <div class="mc-num">03 — VULNERABILITY ASSESSMENT</div>
+        <div class="mc-icon">🎯</div>
+        <div class="mc-name">AI Vuln Prioritization</div>
+        <div class="mc-desc">Automated CVE matching with EPSS scoring (exploit probability), CVSS v3.1 scoring, PoC availability tracking via ExploitDB and GitHub, and weaponization timeline data.</div>
+        <ul class="mc-features">
+          <li>EPSS exploit probability scores</li>
+          <li>ExploitDB &amp; 0day.today tracking</li>
+          <li>Asset-aware risk weighting</li>
+          <li>Patch availability tracking</li>
+        </ul>
+        <div class="mc-status">
+          <div class="badge-dot" style="background:var(--neon2)"></div>
+          <span class="neon2" style="font-family:var(--mono);font-size:10px;letter-spacing:1px">ONLINE — FREE</span>
+        </div>
+      </div>
+
+      <div class="module-card" style="--mc:#ff2d55">
+        <div class="mc-num">04 — EXPLOITATION (AUTHORIZED)</div>
+        <div class="mc-icon">⚡</div>
+        <div class="mc-name">Safe Exploit Simulation</div>
+        <div class="mc-desc">Controlled exploit execution in isolated sandboxes. Verifies impact without causing damage. Requires signed authorization token and target scope declaration per engagement.</div>
+        <ul class="mc-features">
+          <li>Sandboxed exploit execution</li>
+          <li>Metasploit module integration</li>
+          <li>Custom payload builder</li>
+          <li>Impact verification logs</li>
+        </ul>
+        <div class="mc-status">
+          <div class="badge-dot" style="background:var(--neon4)"></div>
+          <span style="color:var(--neon4);font-family:var(--mono);font-size:10px;letter-spacing:1px">PRO — AUTH REQUIRED</span>
+        </div>
+      </div>
+
+      <div class="module-card" style="--mc:#a855f7">
+        <div class="mc-num">05 — POST-EXPLOITATION</div>
+        <div class="mc-icon">🕸️</div>
+        <div class="mc-name">Lateral Movement Sim</div>
+        <div class="mc-desc">Credential pivoting simulation, pass-the-hash, Kerberoasting detection, BloodHound AD attack path visualization, and privilege escalation path mapping across your domain.</div>
+        <ul class="mc-features">
+          <li>BloodHound AD integration</li>
+          <li>Pass-the-hash simulation</li>
+          <li>Kerberoasting detection</li>
+          <li>Privilege escalation paths</li>
+        </ul>
+        <div class="mc-status">
+          <div class="badge-dot" style="background:var(--neon4)"></div>
+          <span style="color:var(--neon4);font-family:var(--mono);font-size:10px;letter-spacing:1px">ENTERPRISE — AUTH REQUIRED</span>
+        </div>
+      </div>
+
+      <div class="module-card" style="--mc:#00ff9d">
+        <div class="mc-num">06 — REPORTING</div>
+        <div class="mc-icon">📋</div>
+        <div class="mc-name">Report Generator</div>
+        <div class="mc-desc">Executive summary + full technical deep-dive. Maps every finding to MITRE ATT&amp;CK and OWASP categories. Includes remediation code snippets. Export to PDF, DOCX, or JSON.</div>
+        <ul class="mc-features">
+          <li>MITRE ATT&amp;CK mapping</li>
+          <li>Remediation code snippets</li>
+          <li>Executive &amp; technical views</li>
+          <li>White-label branding (Pro)</li>
+        </ul>
+        <div class="mc-status">
+          <div class="badge-dot" style="background:var(--neon2)"></div>
+          <span class="neon2" style="font-family:var(--mono);font-size:10px;letter-spacing:1px">ONLINE — FREE</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════
+     LIVE THREAT MAP
+════════════════════════ -->
+<section id="threat-map" class="section">
+  <div class="container">
+    <div style="display:grid;grid-template-columns:1fr 380px;gap:40px;align-items:start" class="reveal">
+      <div>
+        <span class="section-tag">// LIVE THREAT INTELLIGENCE</span>
+        <h2 class="section-title">Global Attack<br>Surface Monitor</h2>
+        <p class="section-sub" style="margin-bottom:28px">Real-time visibility into active threat campaigns, newly exploited CVEs, and attack origins targeting your industry sector.</p>
+
+        <div class="threat-map-container">
+          <div class="map-header">
+            <div class="map-title">
+              🌐 Live Global Threat Activity
+            </div>
+            <div class="map-live-badge">
+              <span style="width:6px;height:6px;border-radius:50%;background:#ff2d55;display:inline-block;animation:pulse-dot 1s infinite"></span>
+              LIVE FEED
+            </div>
+          </div>
+          <div class="map-canvas" id="threat-map-canvas">
+            <svg id="map-svg" style="position:absolute;inset:0;width:100%;height:100%;opacity:0.6" xmlns="http://www.w3.org/2000/svg"></svg>
+            <!-- World map silhouette as background -->
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0.04;font-size:320px;pointer-events:none;user-select:none">🌍</div>
+          </div>
+          <div style="padding:14px 20px;background:var(--bg3);border-top:1px solid var(--border2);display:flex;gap:24px;flex-wrap:wrap">
+            <span style="font-family:var(--mono);font-size:11px;color:var(--text3)"><span style="color:#ff2d55">●</span> Attack Origin</span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--text3)"><span style="color:#00ff9d">●</span> Protected Node</span>
+            <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">Last updated: <span style="color:var(--text2)">just now</span></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Threat feed sidebar -->
+      <div>
+        <div style="background:var(--panel);border:1px solid var(--border2);border-radius:var(--r);overflow:hidden">
+          <div style="background:var(--bg3);padding:14px 18px;border-bottom:1px solid var(--border2);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-family:var(--display);font-size:14px;font-weight:700">Active Threat Feed</span>
+            <span class="badge badge-red"><span class="badge-dot"></span>LIVE</span>
+          </div>
+          <div style="max-height:340px;overflow-y:auto">
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border2);cursor:default">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--neon3)">⚠ CRITICAL CVE</span>
+                <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">2m ago</span>
+              </div>
+              <div style="font-size:13px;color:var(--text);font-weight:500">CVE-2024-6387 (OpenSSH)</div>
+              <div style="font-size:12px;color:var(--text2)">Unauthenticated RCE — active exploits detected</div>
+            </div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border2);cursor:default">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--neon4)">△ HIGH</span>
+                <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">14m ago</span>
+              </div>
+              <div style="font-size:13px;color:var(--text);font-weight:500">Ivanti Connect Secure</div>
+              <div style="font-size:12px;color:var(--text2)">Zero-day authentication bypass</div>
+            </div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border2);cursor:default">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--neon4)">△ HIGH</span>
+                <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">1h ago</span>
+              </div>
+              <div style="font-size:13px;color:var(--text);font-weight:500">PHP CGI RCE (CVE-2024-4577)</div>
+              <div style="font-size:12px;color:var(--text2)">Windows servers under active attack</div>
+            </div>
+            <div style="padding:12px 16px;border-bottom:1px solid var(--border2);cursor:default">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--neon)">● INFO</span>
+                <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">3h ago</span>
+              </div>
+              <div style="font-size:13px;color:var(--text);font-weight:500">Microsoft Patch Tuesday</div>
+              <div style="font-size:12px;color:var(--text2)">12 critical RCEs patched — update now</div>
+            </div>
+            <div style="padding:12px 16px;cursor:default">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+                <span style="font-family:var(--mono);font-size:10px;color:var(--neon3)">⚠ CRITICAL</span>
+                <span style="font-family:var(--mono);font-size:9px;color:var(--text3)">6h ago</span>
+              </div>
+              <div style="font-size:13px;color:var(--text);font-weight:500">Supply chain: malicious npm pkg</div>
+              <div style="font-size:12px;color:var(--text2)">400k weekly downloads affected</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick stats -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px">
+          <div style="background:var(--panel);border:1px solid var(--border2);border-radius:var(--r);padding:16px;text-align:center">
+            <div style="font-family:var(--display);font-size:26px;font-weight:800;color:var(--neon3)">2,847</div>
+            <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">ATTACKS / HOUR</div>
+          </div>
+          <div style="background:var(--panel);border:1px solid var(--border2);border-radius:var(--r);padding:16px;text-align:center">
+            <div style="font-family:var(--display);font-size:26px;font-weight:800;color:var(--neon2)">97.3%</div>
+            <div style="font-size:11px;color:var(--text3);font-family:var(--mono)">BLOCKED RATE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════
+     REPORTS
+════════════════════════ -->
+<section id="reports" class="section">
+  <div class="container">
+    <span class="section-tag reveal">// REPORTING ENGINE</span>
+    <h2 class="section-title reveal">Audit-Ready Reports,<br>Generated in Seconds</h2>
+    <p class="section-sub reveal" style="margin-bottom:40px">Every finding mapped to CVE, CWE, OWASP, and MITRE ATT&amp;CK. Accepted by ISO 27001, SOC 2, and PCI-DSS auditors.</p>
+
+    <div class="report-builder reveal">
+      <!-- Sidebar findings list -->
+      <div class="report-sidebar">
+        <h4>📋 Findings (24 total)</h4>
+
+        <div class="finding-item">
+          <span class="sev-pill sp-crit">CRIT</span>
+          <div>
+            <div class="finding-title">SQL Injection — /api/search</div>
+            <div class="finding-id">CVE-2024-1128 · CVSS 9.8</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-crit">CRIT</span>
+          <div>
+            <div class="finding-title">AWS Secret Key in Source Code</div>
+            <div class="finding-id">CWE-798 · CVSS 9.1</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-crit">CRIT</span>
+          <div>
+            <div class="finding-title">/admin Exposed w/o Auth</div>
+            <div class="finding-id">CWE-285 · CVSS 9.3</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-high">HIGH</span>
+          <div>
+            <div class="finding-title">JWT alg:none Accepted</div>
+            <div class="finding-id">CWE-327 · CVSS 8.1</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-high">HIGH</span>
+          <div>
+            <div class="finding-title">BOLA on /api/users/{id}</div>
+            <div class="finding-id">API1:2023 · CVSS 7.5</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-high">HIGH</span>
+          <div>
+            <div class="finding-title">TLS 1.0 Enabled — POODLE</div>
+            <div class="finding-id">CVE-2014-3566 · CVSS 7.4</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-med">MED</span>
+          <div>
+            <div class="finding-title">Missing Content-Security-Policy</div>
+            <div class="finding-id">CWE-693 · CVSS 5.4</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-med">MED</span>
+          <div>
+            <div class="finding-title">Login Rate Limiting Absent</div>
+            <div class="finding-id">API4:2023 · CVSS 5.3</div>
+          </div>
+        </div>
+        <div class="finding-item">
+          <span class="sev-pill sp-low">LOW</span>
+          <div>
+            <div class="finding-title">Server Version Disclosure</div>
+            <div class="finding-id">CWE-200 · CVSS 3.1</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Report main panel -->
+      <div class="report-main">
+        <div class="report-toolbar">
+          <button class="btn btn-sm report-tab-btn active" style="background:rgba(0,229,255,0.1);color:var(--neon);border:1px solid rgba(0,229,255,0.3)">Executive Summary</button>
+          <button class="btn btn-sm report-tab-btn">Technical Detail</button>
+          <button class="btn btn-sm report-tab-btn">Remediation Plan</button>
+          <div style="flex:1"></div>
+          <button class="btn btn-sm btn-ghost">⬇ Export PDF</button>
+          <button class="btn btn-sm btn-ghost">⬇ DOCX</button>
+        </div>
+
+        <div class="report-body">
+          <div class="report-head-block">
+            <div>
+              <div class="report-org">Acme Corp — Security Assessment</div>
+              <div class="report-details">
+                Target: api.acmecorp.com &amp; *.acmecorp.com<br>
+                Scope: 14 endpoints | 3 cloud accounts<br>
+                Period: 2025-04-01 to 2025-04-08<br>
+                Classification: CONFIDENTIAL
+              </div>
+            </div>
+            <div style="text-align:center">
+              <div class="risk-score-circle">
+                <span class="risk-score-num">7.4</span>
+              </div>
+              <div style="font-family:var(--mono);font-size:10px;color:var(--neon3);margin-top:6px;letter-spacing:1px">RISK SCORE</div>
+            </div>
+          </div>
+
+          <!-- Summary grid -->
+          <div class="vuln-summary-grid">
+            <div class="vs-cell">
+              <span class="vs-num" style="color:#ff2d55">3</span>
+              <span class="vs-lbl">CRITICAL</span>
+            </div>
+            <div class="vs-cell">
+              <span class="vs-num" style="color:#ffb800">3</span>
+              <span class="vs-lbl">HIGH</span>
+            </div>
+            <div class="vs-cell">
+              <span class="vs-num" style="color:#00e5ff">7</span>
+              <span class="vs-lbl">MEDIUM</span>
+            </div>
+            <div class="vs-cell">
+              <span class="vs-num" style="color:#00ff9d">6</span>
+              <span class="vs-lbl">LOW</span>
+            </div>
+            <div class="vs-cell">
+              <span class="vs-num" style="color:#5a8ba5">5</span>
+              <span class="vs-lbl">INFO</span>
+            </div>
+          </div>
+
+          <!-- Severity chart -->
+          <div class="sev-chart-container">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-family:var(--mono);font-size:10px;color:#ff2d55;width:60px">CRITICAL</span>
+                <div style="flex:1;height:6px;background:var(--bg3);border-radius:2px;overflow:hidden">
+                  <div class="sev-bar" data-w="30" style="background:#ff2d55;height:100%;border-radius:2px;width:0;transition:width 1.5s cubic-bezier(.22,1,.36,1)"></div>
+                </div>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--text2);width:16px">3</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-family:var(--mono);font-size:10px;color:#ffb800;width:60px">HIGH</span>
+                <div style="flex:1;height:6px;background:var(--bg3);border-radius:2px;overflow:hidden">
+                  <div class="sev-bar" data-w="30" style="background:#ffb800;height:100%;border-radius:2px;width:0;transition:width 1.5s cubic-bezier(.22,1,.36,1)"></div>
+                </div>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--text2);width:16px">3</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-family:var(--mono);font-size:10px;color:#00e5ff;width:60px">MEDIUM</span>
+                <div style="flex:1;height:6px;background:var(--bg3);border-radius:2px;overflow:hidden">
+                  <div class="sev-bar" data-w="70" style="background:#00e5ff;height:100%;border-radius:2px;width:0;transition:width 1.5s cubic-bezier(.22,1,.36,1)"></div>
+                </div>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--text2);width:16px">7</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px">
+                <span style="font-family:var(--mono);font-size:10px;color:#00ff9d;width:60px">LOW</span>
+                <div style="flex:1;height:6px;background:var(--bg3);border-radius:2px;overflow:hidden">
+                  <div class="sev-bar" data-w="60" style="background:#00ff9d;height:100%;border-radius:2px;width:0;transition:width 1.5s cubic-bezier(.22,1,.36,1)"></div>
+                </div>
+                <span style="font-family:var(--mono);font-size:11px;color:var(--text2);width:16px">6</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top:20px;padding:14px;background:rgba(0,255,157,0.04);border:1px solid rgba(0,255,157,0.12);border-radius:var(--r)">
+            <p style="font-size:13px;color:var(--text2);line-height:1.7"><span style="color:var(--neon2);font-weight:600">AI Executive Summary:</span> The Acme Corp assessment revealed critical authentication and injection vulnerabilities that could result in full data breach. The most urgent remediation is parameterizing the /api/search endpoint and removing the exposed /admin route. Estimated time to resolve Critical findings: 2–4 engineering days.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════
+     INTEGRATIONS
+════════════════════════ -->
+<section class="section" style="overflow:hidden">
+  <div class="container">
+    <span class="section-tag reveal" style="text-align:center;display:block">// INTEGRATIONS</span>
+    <h2 class="section-title reveal" style="text-align:center">Plugs Into Your Stack</h2>
+    <p class="section-sub reveal" style="text-align:center;max-width:500px;margin:0 auto 48px">Native integrations with your CI/CD pipeline, ticketing, and communication tools. Zero friction adoption.</p>
+  </div>
+
+  <div class="integrations-marquee reveal">
+    <div class="marquee-track">
+      <div class="integration-chip"><span class="int-icon">🐙</span><span class="int-name">GitHub Actions</span></div>
+      <div class="integration-chip"><span class="int-icon">🦊</span><span class="int-name">GitLab CI</span></div>
+      <div class="integration-chip"><span class="int-icon">🔵</span><span class="int-name">Azure DevOps</span></div>
+      <div class="integration-chip"><span class="int-icon">🔄</span><span class="int-name">Jenkins</span></div>
+      <div class="integration-chip"><span class="int-icon">🎫</span><span class="int-name">Jira</span></div>
+      <div class="integration-chip"><span class="int-icon">💬</span><span class="int-name">Slack</span></div>
+      <div class="integration-chip"><span class="int-icon">📊</span><span class="int-name">Splunk</span></div>
+      <div class="integration-chip"><span class="int-icon">🔐</span><span class="int-name">HashiCorp Vault</span></div>
+      <div class="integration-chip"><span class="int-icon">☁️</span><span class="int-name">AWS Security Hub</span></div>
+      <div class="integration-chip"><span class="int-icon">📡</span><span class="int-name">Datadog</span></div>
+      <div class="integration-chip"><span class="int-icon">🟢</span><span class="int-name">PagerDuty</span></div>
+      <div class="integration-chip"><span class="int-icon">📱</span><span class="int-name">Microsoft Teams</span></div>
+      <div class="integration-chip"><span class="int-icon">🐳</span><span class="int-name">Docker / Trivy</span></div>
+      <div class="integration-chip"><span class="int-icon">☸️</span><span class="int-name">Kubernetes</span></div>
+      <div class="integration-chip"><span class="int-icon">📋</span><span class="int-name">ServiceNow</span></div>
+      <div class="integration-chip"><span class="int-icon">🟠</span><span class="int-name">CircleCI</span></div>
+      <!-- Duplicate for seamless loop -->
+      <div class="integration-chip"><span class="int-icon">🐙</span><span class="int-name">GitHub Actions</span></div>
+      <div class="integration-chip"><span class="int-icon">🦊</span><span class="int-name">GitLab CI</span></div>
+      <div class="integration-chip"><span class="int-icon">🔵</span><span class="int-name">Azure DevOps</span></div>
+      <div class="integration-chip"><span class="int-icon">🔄</span><span class="int-name">Jenkins</span></div>
+      <div class="integration-chip"><span class="int-icon">🎫</span><span class="int-name">Jira</span></div>
+      <div class="integration-chip"><span class="int-icon">💬</span><span class="int-name">Slack</span></div>
+      <div class="integration-chip"><span class="int-icon">📊</span><span class="int-name">Splunk</span></div>
+      <div class="integration-chip"><span class="int-icon">🔐</span><span class="int-name">HashiCorp Vault</span></div>
+      <div class="integration-chip"><span class="int-icon">☁️</span><span class="int-name">AWS Security Hub</span></div>
+      <div class="integration-chip"><span class="int-icon">📡</span><span class="int-name">Datadog</span></div>
+      <div class="integration-chip"><span class="int-icon">🟢</span><span class="int-name">PagerDuty</span></div>
+      <div class="integration-chip"><span class="int-icon">📱</span><span class="int-name">Microsoft Teams</span></div>
+      <div class="integration-chip"><span class="int-icon">🐳</span><span class="int-name">Docker / Trivy</span></div>
+      <div class="integration-chip"><span class="int-icon">☸️</span><span class="int-name">Kubernetes</span></div>
+      <div class="integration-chip"><span class="int-icon">📋</span><span class="int-name">ServiceNow</span></div>
+      <div class="integration-chip"><span class="int-icon">🟠</span><span class="int-name">CircleCI</span></div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════
+     PRICING
+════════════════════════ -->
+<section id="pricing" class="section">
+  <div class="container">
+    <span class="section-tag reveal" style="text-align:center;display:block">// TRANSPARENT PRICING</span>
+    <h2 class="section-title reveal" style="text-align:center">Free Forever.<br>Enterprise When You're Ready.</h2>
+    <p class="section-sub reveal" style="text-align:center;max-width:480px;margin:0 auto 48px">Core tools will always be free. No hidden fees. Cancel anytime.</p>
+
+    <div class="pricing-grid reveal">
+
+      <div class="price-card">
+        <div class="price-tier-name">// FREE</div>
+        <div class="price-big"><sup>$</sup>0</div>
+        <div class="price-period">Forever free. No credit card.</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="on">10 scans per day</li>
+          <li class="on">Web app &amp; SSL scanner</li>
+          <li class="on">Dependency checker</li>
+          <li class="on">DNS recon &amp; OSINT</li>
+          <li class="on">Secrets detector</li>
+          <li class="on">Basic PDF reports</li>
+          <li class="on">Public CVE database</li>
+          <li class="off">API &amp; network pentest</li>
+          <li class="off">Cloud config auditor</li>
+          <li class="off">CI/CD integration</li>
+          <li class="off">Team workspace</li>
+        </ul>
+        <a href="auth.html?tab=signup" class="btn btn-ghost" style="width:100%;justify-content:center">Get Started Free</a>
+      </div>
+
+      <div class="price-card featured">
+        <div class="price-pop-badge">⭐ MOST POPULAR</div>
+        <div class="price-tier-name">// PRO</div>
+        <div class="price-big"><sup>$</sup>49<sub>/mo</sub></div>
+        <div class="price-period">Per user · cancel anytime</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="on">Unlimited scans</li>
+          <li class="on">Ultra-deep 7-layer engine</li>
+          <li class="on">Shannon entropy secret scan</li>
+          <li class="on">CVE auto-correlation</li>
+          <li class="on">API security fuzzer</li>
+          <li class="on">AI threat modeler</li>
+          <li class="on">MITRE ATT&amp;CK mapping</li>
+          <li class="on">PDF + DOCX + JSON reports</li>
+          <li class="on">Timing &amp; behavioral analysis</li>
+          <li class="on">Continuous monitoring</li>
+          <li class="off">Cloud misconfiguration suite</li>
+        </ul>
+        <a href="upgrade.html" class="btn btn-primary" style="width:100%;justify-content:center">Upgrade with PayPal →</a>
+      </div>
+
+      <div class="price-card">
+        <div class="price-tier-name">// ENTERPRISE</div>
+        <div class="price-big"><sup>$</sup>299<sub>/mo</sub></div>
+        <div class="price-period">Volume licensing · SLA-backed</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="on">Everything in Pro</li>
+          <li class="on">Cloud misconfiguration suite</li>
+          <li class="on">S3 + GCP bucket scanning</li>
+          <li class="on">On-premise deployment</li>
+          <li class="on">SSO / SAML / LDAP</li>
+          <li class="on">White-label branding</li>
+          <li class="on">24/7 dedicated support</li>
+          <li class="on">SLA: 99.99% uptime</li>
+          <li class="on">SOC2 / ISO 27001 reports</li>
+        </ul>
+        <a href="upgrade.html" class="btn btn-ghost" style="width:100%;justify-content:center">Upgrade with PayPal →</a>
+      </div>
+
+      <div class="price-card" style="border-color:rgba(255,184,0,0.35);background:linear-gradient(160deg,rgba(255,184,0,0.06),var(--panel));position:relative">
+        <div class="price-pop-badge" style="background:linear-gradient(90deg,#ffb800,#ff6b00);color:#000;top:-13px">☁ BEST VALUE — LIFETIME</div>
+        <div style="position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,#ffb800,#ff6b00,#ff2d55);border-radius:16px 16px 0 0"></div>
+        <div class="price-tier-name">// CLOUD FOREVER</div>
+        <div class="price-big" style="color:#ffb800"><sup style="color:#ffb800">$</sup>450</div>
+        <div class="price-period">One-time · Lifetime access · No renewals</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,184,0,0.1);border:1px solid rgba(255,184,0,0.3);border-radius:20px;padding:4px 12px;font-size:11px;font-family:var(--mono);color:#ffb800;margin-bottom:12px">♾ Never pay again</div>
+        <div class="price-divider"></div>
+        <ul class="price-features">
+          <li class="on" style="color:var(--text)">Everything Enterprise — forever</li>
+          <li class="on" style="color:var(--text)">Lifetime license · all future updates</li>
+          <li class="on" style="color:var(--text)">Full cloud misconfiguration engine</li>
+          <li class="on" style="color:var(--text)">Ultra-deep 7-layer scan engine</li>
+          <li class="on" style="color:var(--text)">CVE + MITRE ATT&amp;CK correlation</li>
+          <li class="on" style="color:var(--text)">White-label branding</li>
+          <li class="on" style="color:var(--text)">Priority support — forever</li>
+        </ul>
+        <a href="upgrade.html" class="btn btn-primary" style="width:100%;justify-content:center;background:linear-gradient(135deg,#ffb800,#ff6b00);color:#000;border:none">☁ Get Lifetime Access →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════
+     CTA
+════════════════════════ -->
+<div class="cta-section">
+  <div class="orb"></div>
+  <div class="container" style="position:relative;z-index:2">
+    <h2 class="reveal">Start Scanning for Free.<br><span class="neon">No Excuses Left.</span></h2>
+    <p class="reveal reveal-delay-1">Join 3,200+ security teams who found what others missed. Launch your first scan in under 60 seconds.</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap" class="reveal reveal-delay-2">
+      <a href="#scanner" class="btn btn-primary btn-lg">Launch Free Scan →</a>
+      <a href="dashboard.html" class="btn btn-ghost btn-lg">View Dashboard</a>
+    </div>
+    <p class="reveal reveal-delay-3" style="margin-top:24px;font-size:12px;color:var(--text3);font-family:var(--mono)">⚠ FOR AUTHORIZED SECURITY TESTING ONLY · MISUSE VIOLATES TERMS AND MAY VIOLATE LAWS</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════
+     FOOTER
+════════════════════════ -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand-col">
+        <a href="index.html" class="nav-logo" style="display:inline-flex">
+          <div class="logo-mark">
+            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+              <circle cx="20" cy="20" r="5" fill="#00e5ff" opacity="0.9"/>
+              <circle cx="20" cy="20" r="3" fill="#00ff9d"/>
+            </svg>
+          </div>
+          <span class="logo-wordmark">Secure<em>Net</em> Pro</span>
+        </a>
+        <p>Enterprise-grade security testing for every team. Vulnerability detection should be accessible to all — not just organizations with big budgets. Free tools, always.</p>
+        <div style="display:flex;gap:8px;margin-top:16px">
+          <span class="badge badge-green">SOC2</span>
+          <span class="badge badge-neon">ISO 27001</span>
+          <span class="badge badge-neon">GDPR</span>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h5>Tools</h5>
+        <a href="#tools">Web App Scanner</a>
+        <a href="#tools">Code Analyzer</a>
+        <a href="#tools">Network Scanner</a>
+        <a href="#tools">API Tester</a>
+        <a href="#tools">Cloud Auditor</a>
+        <a href="#tools">Secrets Detector</a>
+      </div>
+      <div class="footer-col">
+        <h5>Platform</h5>
+        <a href="dashboard.html">Dashboard</a>
+        <a href="#pentest">Pentest Suite</a>
+        <a href="#reports">Reports</a>
+        <a href="#threat-map">Threat Map</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#">API Docs</a>
+      </div>
+      <div class="footer-col">
+        <h5>Company</h5>
+        <a href="#">About Us</a>
+        <a href="#">Blog</a>
+        <a href="#">Careers</a>
+        <a href="#">Responsible Disclosure</a>
+        <a href="#">Security Hall of Fame</a>
+        <a href="/cdn-cgi/l/email-protection#a6d5c7cac3d5e6d5c3c5d3d4c3c8c3d2d6d4c988cfc9">Contact Sales</a>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <span>© 2025 SecureNet Pro. All rights reserved.</span>
+      <span class="warning-chip">⚠ FOR AUTHORIZED TESTING ONLY</span>
+      <div class="footer-legal">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#">Acceptable Use</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- Scroll to top -->

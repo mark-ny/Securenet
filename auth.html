@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — SecureNet Pro</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .auth-bg-orb-1 {
+      position: fixed;
+      width: 600px; height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,229,255,0.06), transparent 70%);
+      top: -200px; right: -200px;
+      pointer-events: none;
+    }
+
+    .auth-bg-orb-2 {
+      position: fixed;
+      width: 400px; height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(168,85,247,0.05), transparent 70%);
+      bottom: -100px; left: -100px;
+      pointer-events: none;
+    }
+
+    .auth-card {
+      background: var(--panel);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      padding: 40px;
+      width: 100%;
+      max-width: 420px;
+      position: relative;
+      z-index: 10;
+      box-shadow: 0 0 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,229,255,0.04);
+    }
+
+    .auth-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+      text-decoration: none;
+    }
+
+    .auth-logo .logo-mark svg { width: 32px; height: 32px; }
+
+    .auth-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 28px;
+      border-bottom: 1px solid var(--border2);
+    }
+
+    .auth-tab {
+      flex: 1;
+      padding: 10px;
+      text-align: center;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text3);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: var(--transition);
+      margin-bottom: -1px;
+    }
+
+    .auth-tab.active {
+      color: var(--neon);
+      border-bottom-color: var(--neon);
+    }
+
+    .auth-form { display: flex; flex-direction: column; gap: 16px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 6px; }
+
+    .form-label {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--text2);
+      letter-spacing: 1px;
+    }
+
+    .form-input {
+      background: var(--bg3);
+      border: 1px solid var(--border2);
+      border-radius: var(--r);
+      padding: 11px 14px;
+      font-size: 14px;
+      color: var(--text);
+      outline: none;
+      transition: var(--transition);
+      font-family: var(--body);
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .form-input:focus {
+      border-color: var(--neon);
+      box-shadow: 0 0 0 3px rgba(0,229,255,0.08);
+    }
+
+    .form-input::placeholder { color: var(--text3); }
+
+    .form-submit {
+      margin-top: 8px;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .auth-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--text3);
+      font-size: 12px;
+    }
+
+    .auth-divider::before,
+    .auth-divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border2);
+    }
+
+    .auth-error {
+      background: rgba(255,45,85,0.08);
+      border: 1px solid rgba(255,45,85,0.2);
+      border-radius: var(--r);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #ff2d55;
+      display: none;
+    }
+
+    .auth-error.show { display: block; }
+
+    .auth-success {
+      background: rgba(0,255,157,0.06);
+      border: 1px solid rgba(0,255,157,0.2);
+      border-radius: var(--r);
+      padding: 10px 14px;
+      font-size: 13px;
+      color: var(--neon2);
+      display: none;
+    }
+
+    .auth-success.show { display: block; }
+
+    .auth-footer-link {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text3);
+      margin-top: 8px;
+    }
+
+    .auth-footer-link a { color: var(--neon); text-decoration: none; }
+    .auth-footer-link a:hover { text-decoration: underline; }
+
+    .spinner {
+      display: inline-block;
+      width: 14px; height: 14px;
+      border: 2px solid rgba(0,0,0,0.3);
+      border-top-color: #000;
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 6px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .panel-loading {
+      display: none;
+      position: absolute;
+      inset: 0;
+      background: rgba(10,25,41,0.6);
+      backdrop-filter: blur(4px);
+      border-radius: 16px;
+      z-index: 20;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--neon);
+      gap: 10px;
+    }
+
+    .panel-loading.show { display: flex; }
+  </style>
+</head>
+<body>
+<div class="bg-grid"></div>
+<div class="auth-bg-orb-1"></div>
+<div class="auth-bg-orb-2"></div>
+
+<div class="auth-card">
+  <!-- Loading overlay -->
+  <div class="panel-loading" id="loading-overlay">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="10" cy="10" r="8" stroke="rgba(0,229,255,0.2)" stroke-width="2"/>
+      <path d="M10 2a8 8 0 018 8" stroke="#00e5ff" stroke-width="2" stroke-linecap="round">
+        <animateTransform attributeName="transform" type="rotate" from="0 10 10" to="360 10 10" dur="0.8s" repeatCount="indefinite"/>
+      </path>
+    </svg>
+    Authenticating...
+  </div>
+
+  <a href="index.html" class="auth-logo">
+    <div class="logo-mark">
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+        <polygon points="20,8 32,15 32,25 20,32 8,25 8,15" fill="rgba(0,229,255,0.06)" stroke="#00e5ff" stroke-width="1"/>
+        <circle cx="20" cy="20" r="5" fill="#00e5ff" opacity="0.9"/>
+        <circle cx="20" cy="20" r="3" fill="#00ff9d"/>
+      </svg>
+    </div>
+    <span class="logo-wordmark">Secure<em>Net</em> Pro</span>
+  </a>
+
+  <div class="auth-tabs">
+    <div class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">// SIGN IN</div>
+    <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">// CREATE ACCOUNT</div>
+  </div>
+
+  <!-- Error / Success messages -->
+  <div class="auth-error" id="auth-error"></div>
+  <div class="auth-success" id="auth-success"></div>
+
+  <!-- Sign In Form -->
+  <form class="auth-form" id="form-signin" onsubmit="handleSignIn(event)">
+    <div class="form-group">
+      <label class="form-label">EMAIL ADDRESS</label>
+      <input class="form-input" type="email" id="si-email" placeholder="you@company.com" required autocomplete="email"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">PASSWORD</label>
+      <input class="form-input" type="password" id="si-password" placeholder="••••••••" required autocomplete="current-password"/>
+    </div>
+    <button type="submit" class="btn btn-primary form-submit" id="btn-signin">
+      Sign In →
+    </button>
+    <div class="auth-footer-link">
+      <a href="#" onclick="sendPasswordReset(event)">Forgot password?</a>
+    </div>
+  </form>
+
+  <!-- Sign Up Form -->
+  <form class="auth-form" id="form-signup" style="display:none" onsubmit="handleSignUp(event)">
+    <div class="form-group">
+      <label class="form-label">FULL NAME</label>
+      <input class="form-input" type="text" id="su-name" placeholder="Jane Smith" required autocomplete="name"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">EMAIL ADDRESS</label>
+      <input class="form-input" type="email" id="su-email" placeholder="you@company.com" required autocomplete="email"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">PASSWORD <span style="color:var(--text3)">(min 8 chars)</span></label>
+      <input class="form-input" type="password" id="su-password" placeholder="••••••••" required minlength="8" autocomplete="new-password"/>
+    </div>
+    <button type="submit" class="btn btn-primary form-submit" id="btn-signup">
+      Create Free Account →
+    </button>
+    <p style="font-size:11px;color:var(--text3);text-align:center;line-height:1.5">
+      By creating an account you agree to our <a href="#" style="color:var(--neon)">Terms of Service</a> and <a href="#" style="color:var(--neon)">Acceptable Use Policy</a>.
+    </p>
+  </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script>
+  const { Auth } = window.SecureNet;
+
+  // Check if already logged in
+  (async () => {
+    const user = await Auth.getUser();
+    if (user) window.location.href = 'dashboard.html';
+
+    // Pre-fill tab from URL
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('tab') === 'signup') switchTab('signup');
+    if (params.get('auth') === 'required') {
+      showError('Please sign in to access the dashboard.');
+    }
+  })();
+
+  function switchTab(tab) {
+    document.getElementById('form-signin').style.display = tab === 'signin' ? 'flex' : 'none';
+    document.getElementById('form-signup').style.display = tab === 'signup' ? 'flex' : 'none';
+    document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
+    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
+    clearMessages();
+  }
+
+  function showError(msg) {
+    const el = document.getElementById('auth-error');
+    el.textContent = msg;
+    el.classList.add('show');
+    document.getElementById('auth-success').classList.remove('show');
+  }
+
+  function showSuccess(msg) {
+    const el = document.getElementById('auth-success');
+    el.textContent = msg;
+    el.classList.add('show');
+    document.getElementById('auth-error').classList.remove('show');
+  }
+
+  function clearMessages() {
+    document.getElementById('auth-error').classList.remove('show');
+    document.getElementById('auth-success').classList.remove('show');
+  }
+
+  function setLoading(show) {
+    document.getElementById('loading-overlay').classList.toggle('show', show);
+  }
+
+  async function handleSignIn(e) {
+    e.preventDefault();
+    clearMessages();
+    const email    = document.getElementById('si-email').value.trim();
+    const password = document.getElementById('si-password').value;
+    const btn      = document.getElementById('btn-signin');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Signing in...';
+    setLoading(true);
+
+    try {
+      await Auth.signIn(email, password);
+      showSuccess('Success! Redirecting to dashboard...');
+      setTimeout(() => window.location.href = 'dashboard.html', 800);
+    } catch (err) {
+      showError(err.message || 'Sign in failed. Check your credentials.');
+      btn.disabled = false;
+      btn.textContent = 'Sign In →';
+      setLoading(false);
+    }
+  }
+
+  async function handleSignUp(e) {
+    e.preventDefault();
+    clearMessages();
+    const name     = document.getElementById('su-name').value.trim();
+    const email    = document.getElementById('su-email').value.trim();
+    const password = document.getElementById('su-password').value;
+    const btn      = document.getElementById('btn-signup');
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>Creating account...';
+    setLoading(true);
+
+    try {
+      await Auth.signUp(email, password, name);
+      setLoading(false);
+      showSuccess('✅ Account created! Check your email to confirm, then sign in.');
+      btn.disabled = false;
+      btn.textContent = 'Create Free Account →';
+      switchTab('signin');
+    } catch (err) {
+      showError(err.message || 'Sign up failed. Try a different email.');
+      btn.disabled = false;
+      btn.textContent = 'Create Free Account →';
+      setLoading(false);
+    }
+  }
+
+  async function sendPasswordReset(e) {
+    e.preventDefault();
+    const email = document.getElementById('si-email').value.trim();
+    if (!email) {
+      showError('Enter your email address first, then click Forgot Password.');
+      return;
+    }
+    const { sb } = window.SecureNet;
+    await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/auth.html' });
+    showSuccess('Password reset email sent! Check your inbox.');
+  }
+</script>
+</body>
+</html>
