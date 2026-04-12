@@ -4,8 +4,8 @@
    your values from supabase.com → Project Settings → API
    ═══════════════════════════════════════════════════ */
 
-const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-const SUPABASE_KEY = 'YOUR_ANON_PUBLIC_KEY';
+const SUPABASE_URL = 'https://ojpiiyulxyvndcwayorj.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qcGlpeXVseHl2bmRjd2F5b3JqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTg3ODksImV4cCI6MjA5MTQzNDc4OX0.LTW66Mo7TXlPvK1xSSkaJ4VuqMKL3afNMKQguTYf9N8';
 
 /* ── Wait for supabase CDN to load, then init ── */
 function initSupabase() {
