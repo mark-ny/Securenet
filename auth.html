@@ -4,369 +4,274 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Sign In — SecureNet Pro</title>
-  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
-  <link rel="stylesheet" href="css/main.css"/>
   <style>
-    /* ── Reset & base ── */
-    *, *::before, *::after { box-sizing: border-box; }
-
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a1929; --bg2: #0d2137; --bg3: #071520;
+      --panel: #0d1f2d; --border: #112d45;
+      --neon: #00e5ff; --green: #00ff9d; --red: #ff2d55; --gold: #ffb800;
+      --text: #e2f0ff; --text2: #7baec8; --text3: #3a6a80;
+      --mono: 'Courier New', monospace; --r: 8px;
+    }
     body {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-      background: var(--bg);
-      overflow-x: hidden;
-    }
-
-    /* ── Background orbs ── */
-    .orb-1, .orb-2 {
-      position: fixed;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 0;
-    }
-    .orb-1 { width: min(600px, 80vw); height: min(600px, 80vw);
-              background: radial-gradient(circle, rgba(0,229,255,0.07), transparent 70%);
-              top: -20%; right: -20%; }
-    .orb-2 { width: min(400px, 60vw); height: min(400px, 60vw);
-              background: radial-gradient(circle, rgba(168,85,247,0.05), transparent 70%);
-              bottom: -10%; left: -10%; }
-
-    /* ── Card ── */
-    .auth-card {
-      background: var(--panel);
-      border: 1px solid var(--border2);
-      border-radius: 16px;
-      padding: clamp(24px, 5vw, 40px);
-      width: 100%;
-      max-width: 440px;
-      position: relative;
-      z-index: 10;
-      box-shadow: 0 0 60px rgba(0,0,0,0.5), 0 0 0 1px rgba(0,229,255,0.04);
-    }
-
-    /* ── Logo ── */
-    .auth-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 28px;
-      text-decoration: none;
-    }
-    .auth-logo svg { width: 32px; height: 32px; flex-shrink: 0; }
-
-    /* ── Tabs ── */
-    .auth-tabs {
-      display: flex;
-      margin-bottom: 24px;
-      border-bottom: 1px solid var(--border2);
-    }
-    .auth-tab {
-      flex: 1;
-      padding: 10px 8px;
-      text-align: center;
-      font-family: var(--mono);
-      font-size: clamp(10px, 2.5vw, 12px);
-      font-weight: 600;
-      letter-spacing: 0.8px;
-      color: var(--text3);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      transition: var(--transition);
-      margin-bottom: -1px;
-      user-select: none;
-    }
-    .auth-tab.active { color: var(--neon); border-bottom-color: var(--neon); }
-
-    /* ── Form ── */
-    .auth-form { display: flex; flex-direction: column; gap: 14px; }
-    .form-group { display: flex; flex-direction: column; gap: 5px; }
-    .form-label {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--text2);
-      letter-spacing: 1px;
-    }
-    .form-input {
-      background: var(--bg3);
-      border: 1px solid var(--border2);
-      border-radius: var(--r);
-      padding: 12px 14px;
-      font-size: 16px; /* 16px prevents iOS zoom */
+      min-height: 100vh; display: flex; align-items: center;
+      justify-content: center; padding: 20px; background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       color: var(--text);
-      outline: none;
-      transition: var(--transition);
-      font-family: var(--body);
-      width: 100%;
-      -webkit-appearance: none;
     }
-    .form-input:focus {
-      border-color: var(--neon);
-      box-shadow: 0 0 0 3px rgba(0,229,255,0.08);
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+      background-size: 40px 40px; pointer-events: none;
     }
-    .form-input::placeholder { color: var(--text3); }
-
-    /* ── Buttons ── */
-    .btn-full {
-      width: 100%;
-      justify-content: center;
-      margin-top: 4px;
-      padding: 13px;
-      font-size: 15px;
-      min-height: 48px; /* touch target */
-      -webkit-tap-highlight-color: transparent;
+    .card {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 16px; padding: clamp(24px, 6vw, 40px);
+      width: 100%; max-width: 420px; position: relative; z-index: 1;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.5);
     }
-
-    /* ── Messages ── */
-    .auth-msg {
-      border-radius: var(--r);
-      padding: 11px 14px;
-      font-size: 13px;
-      display: none;
-      line-height: 1.4;
+    .card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--neon), var(--green));
+      border-radius: 16px 16px 0 0;
     }
-    .auth-msg.show { display: block; }
-    .auth-msg.error { background: rgba(255,45,85,0.08); border: 1px solid rgba(255,45,85,0.25); color: #ff2d55; }
-    .auth-msg.success { background: rgba(0,255,157,0.06); border: 1px solid rgba(0,255,157,0.2); color: var(--neon2); }
-
-    /* ── Links ── */
-    .auth-link { text-align: center; font-size: 13px; color: var(--text3); margin-top: 4px; }
-    .auth-link a { color: var(--neon); text-decoration: none; }
-    .auth-link a:hover { text-decoration: underline; }
-
-    /* ── Spinner ── */
-    .spinner {
-      display: inline-block;
-      width: 14px; height: 14px;
-      border: 2px solid rgba(0,0,0,0.25);
-      border-top-color: rgba(0,0,0,0.7);
-      border-radius: 50%;
-      animation: spin 0.6s linear infinite;
-      vertical-align: middle;
-      margin-right: 6px;
-    }
+    .logo { display: flex; align-items: center; gap: 10px; margin-bottom: 28px; text-decoration: none; color: var(--text); }
+    .logo svg { width: 32px; height: 32px; flex-shrink: 0; }
+    .logo-text { font-size: 17px; font-weight: 700; }
+    .logo-text em { font-style: normal; color: var(--neon); }
+    .tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: 24px; }
+    .tab { flex: 1; padding: 10px; text-align: center; font-family: var(--mono); font-size: 11px; letter-spacing: 1px; color: var(--text3); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color 0.2s, border-color 0.2s; user-select: none; }
+    .tab.active { color: var(--neon); border-bottom-color: var(--neon); }
+    .form { display: flex; flex-direction: column; gap: 14px; }
+    .field { display: flex; flex-direction: column; gap: 5px; }
+    .label { font-family: var(--mono); font-size: 10px; letter-spacing: 1.5px; color: var(--text2); text-transform: uppercase; }
+    .input { background: var(--bg3); border: 1px solid var(--border); border-radius: var(--r); padding: 12px 14px; font-size: 16px; color: var(--text); outline: none; width: 100%; transition: border-color 0.2s, box-shadow 0.2s; -webkit-appearance: none; font-family: inherit; }
+    .input:focus { border-color: var(--neon); box-shadow: 0 0 0 3px rgba(0,229,255,0.1); }
+    .input::placeholder { color: var(--text3); }
+    .btn { padding: 13px 20px; border-radius: var(--r); border: none; font-size: 14px; font-weight: 600; cursor: pointer; width: 100%; min-height: 48px; transition: all 0.2s; font-family: inherit; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .btn-primary { background: var(--neon); color: #000; }
+    .btn-primary:hover { background: #00c8e0; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    .msg { padding: 12px 14px; border-radius: var(--r); font-size: 13px; line-height: 1.6; display: none; }
+    .msg.show { display: block; }
+    .msg.error   { background: rgba(255,45,85,0.08);  border: 1px solid rgba(255,45,85,0.3);  color: #ff6b6b; }
+    .msg.success { background: rgba(0,255,157,0.06);  border: 1px solid rgba(0,255,157,0.25); color: var(--green); }
+    .msg.info    { background: rgba(255,184,0,0.06);  border: 1px solid rgba(255,184,0,0.25); color: var(--gold); }
+    .forgot { text-align: center; font-size: 13px; color: var(--text3); }
+    .forgot a { color: var(--neon); text-decoration: none; }
+    .terms { font-size: 11px; color: var(--text3); text-align: center; line-height: 1.6; }
+    .terms a { color: var(--neon); text-decoration: none; }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(0,0,0,0.2); border-top-color: rgba(0,0,0,0.7); border-radius: 50%; animation: spin 0.6s linear infinite; flex-shrink: 0; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* ── Loading overlay ── */
-    .auth-loading {
-      display: none;
-      position: absolute;
-      inset: 0;
-      background: rgba(10,25,41,0.65);
-      backdrop-filter: blur(4px);
-      border-radius: 16px;
-      z-index: 30;
-      align-items: center;
-      justify-content: center;
-      font-family: var(--mono);
-      font-size: 13px;
-      color: var(--neon);
-      gap: 10px;
-    }
-    .auth-loading.show { display: flex; }
-
-    /* ── Responsive tweaks ── */
-    @media (max-width: 480px) {
-      .auth-card { border-radius: 12px; }
-    }
+    .resend-btn { background: none; border: 1px solid var(--gold); color: var(--gold); border-radius: var(--r); padding: 8px 14px; font-size: 12px; cursor: pointer; margin-top: 8px; font-family: inherit; transition: all 0.2s; }
+    .resend-btn:hover { background: rgba(255,184,0,0.08); }
   </style>
 </head>
 <body>
-<div class="bg-grid"></div>
-<div class="orb-1"></div>
-<div class="orb-2"></div>
-
-<div class="auth-card">
-  <div class="auth-loading" id="auth-loading">
-    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="10" r="8" stroke="rgba(0,229,255,0.2)" stroke-width="2"/>
-      <path d="M10 2a8 8 0 018 8" stroke="#00e5ff" stroke-width="2" stroke-linecap="round">
-        <animateTransform attributeName="transform" type="rotate"
-          from="0 10 10" to="360 10 10" dur="0.8s" repeatCount="indefinite"/>
-      </path>
-    </svg>
-    Authenticating...
-  </div>
-
-  <a href="index.html" class="auth-logo">
+<div class="card">
+  <a href="index.html" class="logo">
     <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
       <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.6"/>
       <polygon points="20,8 32,15 32,25 20,32 8,25 8,15" fill="rgba(0,229,255,0.06)" stroke="#00e5ff" stroke-width="1"/>
       <circle cx="20" cy="20" r="5" fill="#00e5ff" opacity="0.9"/>
       <circle cx="20" cy="20" r="3" fill="#00ff9d"/>
     </svg>
-    <span class="logo-wordmark">Secure<em>Net</em> Pro</span>
+    <span class="logo-text">Secure<em>Net</em> Pro</span>
   </a>
 
-  <div class="auth-tabs">
-    <div class="auth-tab active" id="tab-signin" onclick="switchTab('signin')">// SIGN IN</div>
-    <div class="auth-tab" id="tab-signup" onclick="switchTab('signup')">// CREATE ACCOUNT</div>
+  <div class="tabs">
+    <div class="tab active" id="tab-in" onclick="switchTab('in')">// SIGN IN</div>
+    <div class="tab" id="tab-up" onclick="switchTab('up')">// CREATE ACCOUNT</div>
   </div>
 
-  <div class="auth-msg error" id="msg-error"></div>
-  <div class="auth-msg success" id="msg-success"></div>
+  <div class="msg error"   id="msg-err"></div>
+  <div class="msg success" id="msg-ok"></div>
+  <div class="msg info"    id="msg-info"></div>
 
   <!-- Sign In -->
-  <form class="auth-form" id="form-signin" onsubmit="handleSignIn(event)">
-    <div class="form-group">
-      <label class="form-label">EMAIL ADDRESS</label>
-      <input class="form-input" type="email" id="si-email"
-        placeholder="you@company.com" required autocomplete="email"/>
+  <form class="form" id="form-in" onsubmit="doSignIn(event)">
+    <div class="field">
+      <label class="label">Email Address</label>
+      <input class="input" type="email" id="in-email" placeholder="you@company.com" required autocomplete="email"/>
     </div>
-    <div class="form-group">
-      <label class="form-label">PASSWORD</label>
-      <input class="form-input" type="password" id="si-password"
-        placeholder="••••••••" required autocomplete="current-password"/>
+    <div class="field">
+      <label class="label">Password</label>
+      <input class="input" type="password" id="in-pass" placeholder="••••••••" required autocomplete="current-password"/>
     </div>
-    <button type="submit" class="btn btn-primary btn-full" id="btn-signin">Sign In →</button>
-    <div class="auth-link">
-      <a href="#" onclick="sendReset(event)">Forgot password?</a>
-    </div>
+    <button class="btn btn-primary" type="submit" id="btn-in">Sign In →</button>
+    <div class="forgot"><a href="#" onclick="doReset(event)">Forgot password?</a></div>
   </form>
 
   <!-- Sign Up -->
-  <form class="auth-form" id="form-signup" style="display:none" onsubmit="handleSignUp(event)">
-    <div class="form-group">
-      <label class="form-label">FULL NAME</label>
-      <input class="form-input" type="text" id="su-name"
-        placeholder="Jane Smith" required autocomplete="name"/>
+  <form class="form" id="form-up" style="display:none" onsubmit="doSignUp(event)">
+    <div class="field">
+      <label class="label">Full Name</label>
+      <input class="input" type="text" id="up-name" placeholder="Jane Smith" required autocomplete="name"/>
     </div>
-    <div class="form-group">
-      <label class="form-label">EMAIL ADDRESS</label>
-      <input class="form-input" type="email" id="su-email"
-        placeholder="you@company.com" required autocomplete="email"/>
+    <div class="field">
+      <label class="label">Email Address</label>
+      <input class="input" type="email" id="up-email" placeholder="you@company.com" required autocomplete="email"/>
     </div>
-    <div class="form-group">
-      <label class="form-label">PASSWORD <span style="color:var(--text3);font-weight:400">(min 8 chars)</span></label>
-      <input class="form-input" type="password" id="su-password"
-        placeholder="••••••••" required minlength="8" autocomplete="new-password"/>
+    <div class="field">
+      <label class="label">Password <span style="color:var(--text3);font-weight:400">(min 8 chars)</span></label>
+      <input class="input" type="password" id="up-pass" placeholder="••••••••" required minlength="8" autocomplete="new-password"/>
     </div>
-    <button type="submit" class="btn btn-primary btn-full" id="btn-signup">Create Free Account →</button>
-    <p style="font-size:11px;color:var(--text3);text-align:center;line-height:1.6;margin-top:4px">
-      By signing up you agree to our
-      <a href="#" style="color:var(--neon)">Terms</a> &amp;
-      <a href="#" style="color:var(--neon)">Acceptable Use Policy</a>.
-    </p>
+    <button class="btn btn-primary" type="submit" id="btn-up">Create Free Account →</button>
+    <p class="terms">By signing up you agree to our <a href="#">Terms</a> &amp; <a href="#">Acceptable Use Policy</a>.</p>
   </form>
 </div>
 
-<!-- Load Supabase ONCE here -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase.js"></script>
 <script>
-  /* Wait for SecureNet to be ready before doing anything */
-  function onReady(cb) {
-    if (window.SecureNet) { cb(); return; }
-    window.addEventListener('securenet:ready', cb, { once: true });
+  /* ════════════════════════════════════════════
+     EDIT THESE TWO LINES WITH YOUR SUPABASE VALUES
+     supabase.com → Project Settings → API
+     ════════════════════════════════════════════ */
+  const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+  const SUPABASE_KEY = 'YOUR_ANON_PUBLIC_KEY';
+  /* ════════════════════════════════════════════ */
+
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  /* Check already logged in */
+  sb.auth.getUser().then(({ data }) => {
+    if (data?.user) window.location.href = 'dashboard.html';
+  }).catch(() => {});
+
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('tab') === 'signup') switchTab('up');
+  if (params.get('auth') === 'required') showMsg('err', '🔒 Please sign in to access the dashboard.');
+
+  function switchTab(t) {
+    document.getElementById('form-in').style.display = t === 'in' ? 'flex' : 'none';
+    document.getElementById('form-up').style.display = t === 'up' ? 'flex' : 'none';
+    document.getElementById('tab-in').classList.toggle('active', t === 'in');
+    document.getElementById('tab-up').classList.toggle('active', t === 'up');
+    clearMsg();
   }
 
-  onReady(async () => {
-    const { Auth } = window.SecureNet;
-
-    /* If already logged in, go to dashboard */
-    try {
-      const user = await Auth.getUser();
-      if (user) { window.location.href = 'dashboard.html'; return; }
-    } catch(e) {}
-
-    /* Handle URL params */
-    const p = new URLSearchParams(window.location.search);
-    if (p.get('tab') === 'signup') switchTab('signup');
-    if (p.get('auth') === 'required') showMsg('error', 'Please sign in to access the dashboard.');
-  });
-
-  /* ── Tab switching ── */
-  function switchTab(tab) {
-    document.getElementById('form-signin').style.display = tab === 'signin' ? 'flex' : 'none';
-    document.getElementById('form-signup').style.display = tab === 'signup' ? 'flex' : 'none';
-    document.getElementById('tab-signin').classList.toggle('active', tab === 'signin');
-    document.getElementById('tab-signup').classList.toggle('active', tab === 'signup');
-    clearMsgs();
-  }
-
-  function showMsg(type, text) {
-    document.getElementById('msg-error').classList.remove('show');
-    document.getElementById('msg-success').classList.remove('show');
-    const el = document.getElementById(type === 'error' ? 'msg-error' : 'msg-success');
-    el.textContent = text;
+  function showMsg(type, text, extraHtml = '') {
+    ['msg-err','msg-ok','msg-info'].forEach(id => {
+      document.getElementById(id).classList.remove('show');
+      document.getElementById(id).innerHTML = '';
+    });
+    const map = { err:'msg-err', ok:'msg-ok', info:'msg-info' };
+    const el = document.getElementById(map[type]);
+    el.innerHTML = text + extraHtml;
     el.classList.add('show');
   }
 
-  function clearMsgs() {
-    document.getElementById('msg-error').classList.remove('show');
-    document.getElementById('msg-success').classList.remove('show');
+  function clearMsg() {
+    ['msg-err','msg-ok','msg-info'].forEach(id => {
+      document.getElementById(id).classList.remove('show');
+    });
   }
 
-  function setLoading(on) {
-    document.getElementById('auth-loading').classList.toggle('show', on);
+  function setBusy(id, busy, label) {
+    const btn = document.getElementById(id);
+    btn.disabled = busy;
+    btn.innerHTML = busy ? '<div class="spinner"></div> Please wait...' : label;
   }
 
-  /* ── Sign In ── */
-  async function handleSignIn(e) {
+  /* ── SIGN IN ── */
+  async function doSignIn(e) {
     e.preventDefault();
-    clearMsgs();
-    const email    = document.getElementById('si-email').value.trim();
-    const password = document.getElementById('si-password').value;
-    const btn      = document.getElementById('btn-signin');
-
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Signing in...';
-    setLoading(true);
+    clearMsg();
+    const email = document.getElementById('in-email').value.trim();
+    const pass  = document.getElementById('in-pass').value;
+    setBusy('btn-in', true);
 
     try {
-      const { Auth } = window.SecureNet;
-      await Auth.signIn(email, password);
-      showMsg('success', '✅ Success! Redirecting...');
+      const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+      if (error) throw error;
+      showMsg('ok', '✅ Signed in! Redirecting...');
       setTimeout(() => window.location.href = 'dashboard.html', 700);
     } catch(err) {
-      showMsg('error', err.message || 'Sign in failed. Check your email and password.');
-      btn.disabled = false;
-      btn.textContent = 'Sign In →';
-      setLoading(false);
+      const m = err.message || '';
+
+      if (m.toLowerCase().includes('email not confirmed')) {
+        /* ── Handle unconfirmed email gracefully ── */
+        showMsg('info',
+          '📧 <strong>Your email is not confirmed yet.</strong><br>' +
+          'Check your inbox for a confirmation email from Supabase and click the link inside.<br>' +
+          'Can\'t find it?',
+          `<br><button class="resend-btn" onclick="resendConfirmation('${email}')">
+            📨 Resend Confirmation Email
+          </button>`
+        );
+      } else if (m.toLowerCase().includes('invalid login') || m.toLowerCase().includes('invalid credentials')) {
+        showMsg('err', '❌ Wrong email or password. Please try again.');
+      } else if (m.toLowerCase().includes('fetch') || m.toLowerCase().includes('network')) {
+        showMsg('err', '🌐 Connection failed. Check that your Supabase URL and key are correctly set in auth.html, and that you have internet access.');
+      } else {
+        showMsg('err', '❌ ' + m);
+      }
+      setBusy('btn-in', false, 'Sign In →');
     }
   }
 
-  /* ── Sign Up ── */
-  async function handleSignUp(e) {
-    e.preventDefault();
-    clearMsgs();
-    const name     = document.getElementById('su-name').value.trim();
-    const email    = document.getElementById('su-email').value.trim();
-    const password = document.getElementById('su-password').value;
-    const btn      = document.getElementById('btn-signup');
+  /* ── RESEND CONFIRMATION EMAIL ── */
+  async function resendConfirmation(email) {
+    try {
+      await sb.auth.resend({ type: 'signup', email });
+      showMsg('ok', '✅ Confirmation email resent! Check your inbox (and spam folder).');
+    } catch(err) {
+      showMsg('err', '❌ Could not resend: ' + (err.message || 'Try again later.'));
+    }
+  }
 
-    btn.disabled = true;
-    btn.innerHTML = '<span class="spinner"></span>Creating account...';
-    setLoading(true);
+  /* ── SIGN UP ── */
+  async function doSignUp(e) {
+    e.preventDefault();
+    clearMsg();
+    const name  = document.getElementById('up-name').value.trim();
+    const email = document.getElementById('up-email').value.trim();
+    const pass  = document.getElementById('up-pass').value;
+    setBusy('btn-up', true);
 
     try {
-      const { Auth } = window.SecureNet;
-      await Auth.signUp(email, password, name);
-      setLoading(false);
-      showMsg('success', '✅ Account created! Check your email to confirm, then sign in.');
-      btn.disabled = false;
-      btn.textContent = 'Create Free Account →';
-      setTimeout(() => switchTab('signin'), 2000);
+      const { data, error } = await sb.auth.signUp({
+        email, password: pass,
+        options: { data: { full_name: name } }
+      });
+      if (error) throw error;
+
+      if (data.user) {
+        await sb.from('profiles').upsert({
+          id: data.user.id, email, full_name: name, plan: 'free', scan_count: 0
+        }).catch(() => {});
+      }
+
+      showMsg('ok',
+        '✅ <strong>Account created!</strong><br>' +
+        'We sent a confirmation link to <strong>' + email + '</strong>.<br>' +
+        'Click the link in that email, then come back here to sign in.'
+      );
+      setBusy('btn-up', false, 'Create Free Account →');
+      setTimeout(() => switchTab('in'), 3000);
     } catch(err) {
-      showMsg('error', err.message || 'Sign up failed. Try a different email.');
-      btn.disabled = false;
-      btn.textContent = 'Create Free Account →';
-      setLoading(false);
+      const m = err.message || '';
+      if (m.includes('already registered')) {
+        showMsg('err', '⚠ This email is already registered. <a href="#" onclick="switchTab(\'in\')" style="color:var(--neon)">Sign in instead →</a>');
+      } else {
+        showMsg('err', '❌ ' + m);
+      }
+      setBusy('btn-up', false, 'Create Free Account →');
     }
   }
 
-  /* ── Password reset ── */
-  async function sendReset(e) {
+  /* ── PASSWORD RESET ── */
+  async function doReset(e) {
     e.preventDefault();
-    const email = document.getElementById('si-email').value.trim();
-    if (!email) { showMsg('error', 'Enter your email address first, then click Forgot Password.'); return; }
-    const { sb } = window.SecureNet;
-    await sb.auth.resetPasswordForEmail(email, {
-      redirectTo: window.location.origin + '/auth.html'
-    });
-    showMsg('success', '📧 Password reset email sent! Check your inbox.');
+    const email = document.getElementById('in-email').value.trim();
+    if (!email) { showMsg('err', '⚠ Enter your email address above first, then click Forgot Password.'); return; }
+    try {
+      await sb.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin + '/auth.html' });
+      showMsg('ok', '📧 Password reset email sent! Check your inbox.');
+    } catch(err) {
+      showMsg('err', '❌ ' + (err.message || 'Reset failed.'));
+    }
   }
 </script>
 </body>
