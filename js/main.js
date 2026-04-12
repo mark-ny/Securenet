@@ -519,20 +519,4 @@
         if (idx < iterations) return original[idx];
         return chars[Math.floor(Math.random() * chars.length)];
       }).join('');
-      if (iterations >= original.length) {
-        clearInterval(iv);
-        el.textContent = original;
-      }
-      iterations += 1.5;
-    }, 30);
-  }
-
-  document.querySelectorAll('.glitch-on-hover').forEach(el => {
-    el.addEventListener('mouseenter', () => glitch(el));
-  });
-
-  /* ── Init ── */
-  console.log('%cSecureNet Pro v3.1 | Loaded', 'color:#00e5ff;font-family:monospace;font-size:14px;');
-  console.log('%c⚠ For authorized security testing only.', 'color:#ff2d55;font-family:monospace;');
-
-})();
+      if (iterations >= original.length
