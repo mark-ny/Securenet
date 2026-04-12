@@ -7,7 +7,7 @@
    ═══════════════════════════════════════════════════ */
 
 // ── Change this to your Render.com URL after deploying ──
-const API_BASE = 'https://YOUR-RENDER-APP.onrender.com';
+const API_BASE = 'https://securenet-api.onrender.com';
 
 function onSecureNetReady(cb) {
   if (window.SecureNet) { cb(); return; }
