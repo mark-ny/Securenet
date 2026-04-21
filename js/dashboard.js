@@ -6,15 +6,12 @@
    - Breach check widget
    ═══════════════════════════════════════════════════ */
 
-// ── Change this to your Render.com URL after deploying ──
-const API_BASE = 'https://securenet-api.onrender.com';
+// ── ⚠ REQUIRED: Change this to your Render.com URL after deploying the backend ──
+// ── Leave as-is for frontend-only / Supabase-only mode (scan results still save) ──
+const API_BASE = 'https://YOUR-RENDER-APP.onrender.com';
+const API_CONFIGURED = !API_BASE.includes('YOUR-RENDER');
 
-function onSecureNetReady(cb) {
-  if (window.SecureNet) { cb(); return; }
-  window.addEventListener('securenet:ready', cb, { once: true });
-}
-
-onSecureNetReady(async () => {
+(async () => {
   const { Auth, DB, Realtime } = window.SecureNet;
 
   /* ── Auth guard ── */
@@ -306,6 +303,18 @@ onSecureNetReady(async () => {
 
     let realResults = null;
 
+    // Try real scan engine only if API_BASE has been configured
+    if (!API_CONFIGURED) {
+      addLine('warn', 'Real scan engine not configured — running simulation mode');
+      addLine('dim', '(Set API_BASE in dashboard.js to your Render.com URL for live scans)');
+      addLine('dim', '─────────────────────────────────');
+      const script = SCAN_SCRIPTS[scanType] || SCAN_SCRIPTS['Web App'];
+      await new Promise(resolve => {
+        script.forEach((line, i) => {
+          setTimeout(() => { addLine(line[0], line[1]); if (i === script.length - 1) setTimeout(resolve, 200); }, i * 160);
+        });
+      });
+    } else
     // Try real scan engine first
     try {
       const resp = await fetch(`${API_BASE}/api/scan`, {
@@ -663,4 +672,4 @@ onSecureNetReady(async () => {
     return `${Math.floor(diff/86400)}d ago`;
   }
 
-});
+})();
