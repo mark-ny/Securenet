@@ -1,6 +1,5 @@
-   /* Sign out any existing session first, then check */
-   (async () => {
-     await sb.auth.signOut();
-     const { data } = await sb.auth.getUser();
-     if (data?.user) window.location.href = 'dashboard.html';
-   })();
+  /* Redirect to dashboard if already signed in */
+(async () => {
+  const { data } = await sb.auth.getUser();
+  if (data?.user) window.location.href = 'dashboard.html';
+})();
