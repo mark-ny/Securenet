@@ -1,5 +1,9 @@
+window.addEventListener('securenet:ready', () => {
+  const sb = window.SecureNet.sb;
+
   /* Redirect to dashboard if already signed in */
-(async () => {
-  const { data } = await sb.auth.getUser();
-  if (data?.user) window.location.href = 'dashboard.html';
-})();
+  (async () => {
+    const { data } = await sb.auth.getUser();
+    if (data?.user) window.location.href = 'dashboard.html';
+  })();
+});
