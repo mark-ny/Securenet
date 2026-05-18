@@ -672,4 +672,4 @@ window.addEventListener('securenet:ready', async () => {
     return `${Math.floor(diff/86400)}d ago`;
   }
 
-})();
+});
