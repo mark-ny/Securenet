@@ -1,9 +1,150 @@
-window.addEventListener('securenet:ready', () => {
-  const sb = window.SecureNet.sb;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign In — SecureNet Pro</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <style>
+    body { display:flex; align-items:center; justify-content:center; min-height:100vh; }
+    .auth-card {
+      background:var(--panel); border:1px solid var(--border2);
+      border-radius:16px; padding:40px; width:100%; max-width:420px;
+      margin: 16px;
+    }
+    .auth-logo { display:flex; align-items:center; gap:10px; margin-bottom:28px; }
+    .auth-logo .logo-wordmark { font-size:18px; font-weight:700; }
+    .auth-title { font-size:22px; font-weight:800; margin-bottom:6px; }
+    .auth-sub { font-size:14px; color:var(--text2); margin-bottom:28px; }
+    .form-group { margin-bottom:16px; }
+    .form-group label { display:block; font-family:var(--mono); font-size:11px; color:var(--text2); letter-spacing:1px; margin-bottom:6px; }
+    .form-group input {
+      width:100%; background:var(--bg3); border:1px solid var(--border2);
+      border-radius:var(--r); padding:12px 14px; font-size:15px;
+      color:var(--text); outline:none; box-sizing:border-box;
+    }
+    .form-group input:focus { border-color:var(--neon); }
+    .auth-btn {
+      width:100%; padding:13px; background:var(--neon); color:#000;
+      border:none; border-radius:var(--r); font-size:15px; font-weight:700;
+      cursor:pointer; margin-top:8px; transition:opacity 0.2s;
+    }
+    .auth-btn:hover { opacity:0.85; }
+    .auth-btn:disabled { opacity:0.5; cursor:not-allowed; }
+    .auth-error {
+      display:none; background:rgba(255,45,85,0.1); border:1px solid rgba(255,45,85,0.3);
+      border-radius:var(--r); padding:10px 14px; font-size:13px;
+      color:#ff2d55; margin-bottom:16px;
+    }
+    .auth-toggle { text-align:center; margin-top:20px; font-size:13px; color:var(--text2); }
+    .auth-toggle a { color:var(--neon); cursor:pointer; text-decoration:none; }
+  </style>
+</head>
+<body>
+<div class="auth-card">
+  <div class="auth-logo">
+    <svg viewBox="0 0 40 40" fill="none" width="32" xmlns="http://www.w3.org/2000/svg">
+      <polygon points="20,2 38,12 38,28 20,38 2,28 2,12" stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+      <circle cx="20" cy="20" r="5" fill="#00e5ff" opacity="0.9"/>
+      <circle cx="20" cy="20" r="3" fill="#00ff9d"/>
+    </svg>
+    <span class="logo-wordmark">Secure<em>Net</em> Pro</span>
+  </div>
 
-  /* Redirect to dashboard if already signed in */
-  (async () => {
-    const { data } = await sb.auth.getUser();
-    if (data?.user) window.location.href = 'dashboard.html';
-  })();
-});
+  <div id="signin-view">
+    <div class="auth-title">Welcome back</div>
+    <div class="auth-sub">Sign in to your SecureNet account</div>
+    <div class="auth-error" id="signin-error"></div>
+    <div class="form-group">
+      <label>EMAIL</label>
+      <input type="email" id="signin-email" placeholder="you@example.com"/>
+    </div>
+    <div class="form-group">
+      <label>PASSWORD</label>
+      <input type="password" id="signin-password" placeholder="••••••••"/>
+    </div>
+    <button class="auth-btn" id="signin-btn" onclick="handleSignIn()">Sign In</button>
+    <div class="auth-toggle">Don't have an account? <a onclick="showSignUp()">Sign up</a></div>
+  </div>
+
+  <div id="signup-view" style="display:none">
+    <div class="auth-title">Create account</div>
+    <div class="auth-sub">Start securing your assets today</div>
+    <div class="auth-error" id="signup-error"></div>
+    <div class="form-group">
+      <label>FULL NAME</label>
+      <input type="text" id="signup-name" placeholder="Your name"/>
+    </div>
+    <div class="form-group">
+      <label>EMAIL</label>
+      <input type="email" id="signup-email" placeholder="you@example.com"/>
+    </div>
+    <div class="form-group">
+      <label>PASSWORD</label>
+      <input type="password" id="signup-password" placeholder="Min 6 characters"/>
+    </div>
+    <button class="auth-btn" id="signup-btn" onclick="handleSignUp()">Create Account</button>
+    <div class="auth-toggle">Already have an account? <a onclick="showSignIn()">Sign in</a></div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase.js"></script>
+<script>
+  function showSignUp() {
+    document.getElementById('signin-view').style.display = 'none';
+    document.getElementById('signup-view').style.display = 'block';
+  }
+  function showSignIn() {
+    document.getElementById('signup-view').style.display = 'none';
+    document.getElementById('signin-view').style.display = 'block';
+  }
+
+  window.addEventListener('securenet:ready', () => {
+    const { Auth } = window.SecureNet;
+
+    // Redirect if already signed in
+    (async () => {
+      const user = await Auth.getUser();
+      if (user) window.location.href = 'dashboard.html';
+    })();
+
+    window.handleSignIn = async () => {
+      const email = document.getElementById('signin-email').value.trim();
+      const password = document.getElementById('signin-password').value;
+      const btn = document.getElementById('signin-btn');
+      const err = document.getElementById('signin-error');
+      err.style.display = 'none';
+      btn.disabled = true; btn.textContent = 'Signing in...';
+      try {
+        await Auth.signIn(email, password);
+        window.location.href = 'dashboard.html';
+      } catch(e) {
+        err.textContent = e.message || 'Sign in failed. Check your credentials.';
+        err.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Sign In';
+      }
+    };
+
+    window.handleSignUp = async () => {
+      const name = document.getElementById('signup-name').value.trim();
+      const email = document.getElementById('signup-email').value.trim();
+      const password = document.getElementById('signup-password').value;
+      const btn = document.getElementById('signup-btn');
+      const err = document.getElementById('signup-error');
+      err.style.display = 'none';
+      btn.disabled = true; btn.textContent = 'Creating account...';
+      try {
+        await Auth.signUp(email, password, name);
+        window.location.href = 'dashboard.html';
+      } catch(e) {
+        err.textContent = e.message || 'Sign up failed. Try again.';
+        err.style.display = 'block';
+        btn.disabled = false; btn.textContent = 'Create Account';
+      }
+    };
+  });
+</script>
+</body>
+</html>
