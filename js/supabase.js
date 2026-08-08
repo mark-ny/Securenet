@@ -7,9 +7,19 @@
 const SUPABASE_URL = 'https://ojpiiyulxyvndcwayorj.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9qcGlpeXVseHl2bmRjd2F5b3JqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTg3ODksImV4cCI6MjA5MTQzNDc4OX0.LTW66Mo7TXlPvK1xSSkaJ4VuqMKL3afNMKQguTYf9N8';
 
-/* ── Wait for supabase CDN to load, then init ── */
+/* ── Wait for supabase CDN to load, then init ──
+   Guarded with a timeout: if the CDN script is blocked (ad blocker,
+   corporate firewall, offline), we'd otherwise poll forever with no
+   feedback — buttons that call window.handleSignIn/handleSignUp
+   would silently do nothing since those never get defined. */
+let __sbWaitMs = 0;
 function initSupabase() {
   if (typeof window.supabase === 'undefined') {
+    __sbWaitMs += 50;
+    if (__sbWaitMs >= 8000) {
+      window.dispatchEvent(new Event('securenet:load-error'));
+      return;
+    }
     setTimeout(initSupabase, 50);
     return;
   }
