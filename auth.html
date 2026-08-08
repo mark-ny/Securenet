@@ -64,7 +64,7 @@
       <label>PASSWORD</label>
       <input type="password" id="signin-password" placeholder="••••••••"/>
     </div>
-    <button class="auth-btn" id="signin-btn" onclick="handleSignIn()">Sign In</button>
+    <button class="auth-btn" id="signin-btn" onclick="handleSignIn()" disabled>Loading...</button>
     <div class="auth-toggle">Don't have an account? <a onclick="showSignUp()">Sign up</a></div>
   </div>
 
@@ -84,7 +84,7 @@
       <label>PASSWORD</label>
       <input type="password" id="signup-password" placeholder="Min 6 characters"/>
     </div>
-    <button class="auth-btn" id="signup-btn" onclick="handleSignUp()">Create Account</button>
+    <button class="auth-btn" id="signup-btn" onclick="handleSignUp()" disabled>Loading...</button>
     <div class="auth-toggle">Already have an account? <a onclick="showSignIn()">Sign in</a></div>
   </div>
 </div>
@@ -100,6 +100,31 @@
     document.getElementById('signup-view').style.display = 'none';
     document.getElementById('signin-view').style.display = 'block';
   }
+
+  // Turns a raw error (often the unhelpful browser-level "Failed to
+  // fetch") into a message that actually tells the person what to check.
+  function friendlyAuthError(e) {
+    const raw = (e && e.message) || '';
+    if (raw === 'Failed to fetch' || e instanceof TypeError) {
+      return "Can't reach the server. This usually means the backend project is paused/asleep, or the site's network request is being blocked (ad blocker/VPN/firewall). Check your Supabase project status, or try disabling any content blockers and reload.";
+    }
+    return raw || 'Something went wrong. Please try again.';
+  }
+
+  // If the Supabase script itself never loads (blocked CDN, offline),
+  // 'securenet:ready' will never fire — surface that instead of
+  // leaving the buttons silently unresponsive.
+  window.addEventListener('securenet:load-error', () => {
+    ['signin-error', 'signup-error'].forEach(id => {
+      const el = document.getElementById(id);
+      el.textContent = "Couldn't load the sign-in service (a required script failed to load). Check your internet connection or ad blocker, then reload the page.";
+      el.style.display = 'block';
+    });
+    ['signin-btn', 'signup-btn'].forEach(id => {
+      const btn = document.getElementById(id);
+      btn.disabled = true;
+    });
+  });
 
   window.addEventListener('securenet:ready', () => {
     const { Auth } = window.SecureNet;
@@ -121,7 +146,7 @@
         await Auth.signIn(email, password);
         window.location.href = 'dashboard.html';
       } catch(e) {
-        err.textContent = e.message || 'Sign in failed. Check your credentials.';
+        err.textContent = friendlyAuthError(e);
         err.style.display = 'block';
         btn.disabled = false; btn.textContent = 'Sign In';
       }
@@ -139,7 +164,7 @@
         await Auth.signUp(email, password, name);
         window.location.href = 'dashboard.html';
       } catch(e) {
-        err.textContent = e.message || 'Sign up failed. Try again.';
+        err.textContent = friendlyAuthError(e);
         err.style.display = 'block';
         btn.disabled = false; btn.textContent = 'Create Account';
       }
