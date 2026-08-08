@@ -31,7 +31,7 @@
 }
 
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
-html { scroll-behavior: smooth; font-size: 16px; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 
 body {
   background: var(--bg);
@@ -40,7 +40,7 @@ body {
   font-weight: 400;
   line-height: 1.6;
   overflow-x: hidden;
-  cursor: none;
+  max-width: 100vw;
 }
 
 /* ── Custom cursor ── */
@@ -69,6 +69,11 @@ body {
 }
 
 body:hover #cursor { opacity:1; }
+
+/* Native cursor is only hidden on pages that actually render the
+   custom #cursor/#cursor-ring dot (index.html, via main.js). Pages
+   without that script keep the normal visible cursor. */
+body.custom-cursor-active { cursor: none; }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 4px; }
@@ -305,6 +310,7 @@ code, .mono { font-family: var(--mono); }
   font-size: 18px;
   letter-spacing: 1px;
   color: var(--text);
+  white-space: nowrap;
 }
 
 .logo-wordmark em {
@@ -415,6 +421,7 @@ code, .mono { font-family: var(--mono); }
   padding-bottom: 60px;
   position: relative;
   z-index: 2;
+  overflow-x: hidden;
 }
 
 .hero-content { max-width: 760px; }
@@ -1020,6 +1027,17 @@ input[type=range]::-webkit-slider-thumb {
 .mc-features li::before { content:'›'; color: var(--mc, var(--neon)); font-size:14px; }
 .mc-status { margin-top: 16px; display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:10px; letter-spacing:1px; }
 
+/* ── Threat map layout ── */
+.threat-map-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .threat-map-layout { grid-template-columns: 1fr; }
+}
+
 /* ── Threat map ── */
 .threat-map-container {
   background: var(--panel);
@@ -1373,6 +1391,7 @@ input[type=range]::-webkit-slider-thumb {
   padding: 120px 0;
   position: relative;
   z-index: 2;
+  overflow-x: hidden;
 }
 
 .cta-section .orb {
@@ -1537,7 +1556,8 @@ footer {
   .container { padding: 0 20px; }
   .section { padding: 64px 0; }
   .nav-menu { display:none; }
-  .hamburger { display:block; }
+  .nav-actions .btn { display:none; }
+  .hamburger { display:block; cursor:pointer; }
   .hero-visual { display:none; }
   .hero { text-align:center; }
   .hero-content { margin:0 auto; }
