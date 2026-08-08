@@ -8,7 +8,7 @@
 
 // ── ⚠ REQUIRED: Change this to your Render.com URL after deploying the backend ──
 // ── Leave as-is for frontend-only / Supabase-only mode (scan results still save) ──
-const API_BASE = 'https://YOUR-RENDER-APP.onrender.com';
+const API_BASE = 'https://securenet-api.onrender.com';
 const API_CONFIGURED = !API_BASE.includes('YOUR-RENDER'); 
 
 window.addEventListener('securenet:ready', async () => {
