@@ -5,38 +5,50 @@
 (function () {
   'use strict';
 
-  /* ── Custom cursor ── */
+  /* ── Custom cursor ──
+     Only activate on pages/devices that actually have the cursor
+     elements and a real mouse — guards against the null-ref that
+     previously threw on every mousemove wherever #cursor/#cursor-ring
+     were missing, and against hiding the native cursor on touch
+     devices where there's nothing to replace it with. */
   const cursor = document.getElementById('cursor');
   const ring = document.getElementById('cursor-ring');
-  let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
+  const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  document.addEventListener('mousemove', e => {
-    mouseX = e.clientX; mouseY = e.clientY;
-    cursor.style.left = mouseX + 'px';
-    cursor.style.top  = mouseY + 'px';
-  });
+  if (cursor && ring && hasHover) {
+    document.body.classList.add('custom-cursor-active');
+    let mouseX = 0, mouseY = 0, ringX = 0, ringY = 0;
 
-  function animateRing() {
-    ringX += (mouseX - ringX) * 0.12;
-    ringY += (mouseY - ringY) * 0.12;
-    ring.style.left = ringX + 'px';
-    ring.style.top  = ringY + 'px';
-    requestAnimationFrame(animateRing);
+    document.addEventListener('mousemove', e => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      cursor.style.left = mouseX + 'px';
+      cursor.style.top  = mouseY + 'px';
+    });
+
+    function animateRing() {
+      ringX += (mouseX - ringX) * 0.12;
+      ringY += (mouseY - ringY) * 0.12;
+      ring.style.left = ringX + 'px';
+      ring.style.top  = ringY + 'px';
+      requestAnimationFrame(animateRing);
+    }
+    animateRing();
   }
-  animateRing();
 
-  document.querySelectorAll('a,button,[role=button],.tool-card,.module-card,.flow-step,.finding-item,.scan-type-btn,.scan-option,.filter-btn,.price-card').forEach(el => {
-    el.addEventListener('mouseenter', () => {
-      cursor.style.width = '16px'; cursor.style.height = '16px';
-      ring.style.width = '52px'; ring.style.height = '52px';
-      ring.style.borderColor = 'rgba(0,229,255,0.6)';
+  if (cursor && ring && hasHover) {
+    document.querySelectorAll('a,button,[role=button],.tool-card,.module-card,.flow-step,.finding-item,.scan-type-btn,.scan-option,.filter-btn,.price-card').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.width = '16px'; cursor.style.height = '16px';
+        ring.style.width = '52px'; ring.style.height = '52px';
+        ring.style.borderColor = 'rgba(0,229,255,0.6)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.width = '10px'; cursor.style.height = '10px';
+        ring.style.width = '36px'; ring.style.height = '36px';
+        ring.style.borderColor = 'rgba(0,229,255,0.4)';
+      });
     });
-    el.addEventListener('mouseleave', () => {
-      cursor.style.width = '10px'; cursor.style.height = '10px';
-      ring.style.width = '36px'; ring.style.height = '36px';
-      ring.style.borderColor = 'rgba(0,229,255,0.4)';
-    });
-  });
+  }
 
   /* ── Nav scroll behavior ── */
   const nav = document.getElementById('nav');
@@ -71,12 +83,22 @@
     });
   });
 
-  /* ── Scroll reveal ── */
+  /* ── Scroll reveal ──
+     rootMargin extends the trigger zone 250px past the bottom of the
+     viewport, so content starts fading in before it's scrolled into
+     view instead of right as it arrives — a fast flick-scroll (common
+     on mobile) can otherwise outrun the 0.7s transition and leave a
+     section looking blank for a moment. The timeout below is a
+     failsafe: if a section is somehow never observed as intersecting
+     (very old browser, a missed frame, etc.) nothing stays invisible
+     forever. */
   const revealObserver = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
-  }, { threshold: 0.06, rootMargin: '0px 0px -40px 0px' });
+  }, { threshold: 0.01, rootMargin: '0px 0px 250px 0px' });
 
-  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+  const revealEls = document.querySelectorAll('.reveal');
+  revealEls.forEach(el => revealObserver.observe(el));
+  setTimeout(() => revealEls.forEach(el => el.classList.add('visible')), 3000);
 
   /* ── Count-up animation ── */
   function countUp(el, target, suffix = '', decimals = 0) {
@@ -515,16 +537,29 @@
 
   /* ── Glitch text effect ── */
   function glitch(el) {
-    const original = el.textContent;
+    // Always read the true original from a data attribute (set once)
+    // instead of el.textContent, which may already be mid-scramble
+    // if the previous animation on this element hasn't finished yet.
+    if (!el.dataset.glitchOriginal) {
+      el.dataset.glitchOriginal = el.textContent;
+    }
+    const original = el.dataset.glitchOriginal;
     const chars = '01!@#$%^&*<>/\\|?';
+
+    // Cancel any in-flight animation on this element so overlapping
+    // hovers can't stack intervals and leave the text stuck scrambled.
+    if (el._glitchInterval) clearInterval(el._glitchInterval);
+
     let iterations = 0;
-    const iv = setInterval(() => {
+    el._glitchInterval = setInterval(() => {
       el.textContent = original.split('').map((char, idx) => {
         if (idx < iterations) return original[idx];
+        if (char === ' ') return ' ';
         return chars[Math.floor(Math.random() * chars.length)];
       }).join('');
       if (iterations >= original.length) {
-        clearInterval(iv);
+        clearInterval(el._glitchInterval);
+        el._glitchInterval = null;
         el.textContent = original;
       }
       iterations += 1.5;
