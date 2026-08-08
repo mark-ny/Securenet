@@ -129,6 +129,15 @@
   window.addEventListener('securenet:ready', () => {
     const { Auth } = window.SecureNet;
 
+    // The buttons start disabled/"Loading..." in the HTML so people can't
+    // click them before Auth exists. This is the only place that ever
+    // turns them back on — without it they're stuck at "Loading..." forever,
+    // even when Supabase connects fine.
+    const signinBtn = document.getElementById('signin-btn');
+    const signupBtn = document.getElementById('signup-btn');
+    signinBtn.disabled = false; signinBtn.textContent = 'Sign In';
+    signupBtn.disabled = false; signupBtn.textContent = 'Create Account';
+
     // Redirect if already signed in
     (async () => {
       const user = await Auth.getUser();
